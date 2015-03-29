@@ -1,0 +1,5 @@
+<map id="bloom::stream::iobuffer::ioblock" name="bloom::stream::iobuffer::ioblock">
+<area shape="rect" id="node2" href="$da/d45/classbloom_1_1stream_1_1iobuffer_1_1ioblock__mem.html" title="External data sub&#45;buffer. " alt="" coords="225,5,397,47"/>
+<area shape="rect" id="node3" href="$d4/d82/classbloom_1_1stream_1_1iobuffer_1_1ioblock__new.html" title="New allocation data sub&#45;buffer. " alt="" coords="225,71,397,112"/>
+<area shape="rect" id="node4" href="$db/d7f/classbloom_1_1stream_1_1iobuffer_1_1ioblock__str.html" title="External string sub&#45;buffer. " alt="" coords="225,136,397,177"/>
+</map>

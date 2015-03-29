@@ -1,0 +1,8 @@
+<map id="bloom::stream::i_base" name="bloom::stream::i_base">
+<area shape="rect" id="node2" href="$d8/d40/classbloom_1_1stream_1_1io__base.html" title="Base input/output stream class. " alt="" coords="111,80,285,107"/>
+<area shape="rect" id="node5" href="$d1/d7c/classbloom_1_1stream_1_1istream.html" title="Input stream from std::istream to bloom. " alt="" coords="309,80,482,107"/>
+<area shape="rect" id="node6" href="$de/d87/classbloom_1_1stream_1_1istring.html" title="Input text stream. " alt="" coords="506,80,669,107"/>
+<area shape="rect" id="node3" href="$d3/da0/classbloom_1_1stream_1_1iobuffer.html" title="Stream buffer. " alt="" coords="5,155,177,181"/>
+<area shape="rect" id="node4" href="$d2/da4/classbloom_1_1stream_1_1iostream.html" title="Input/Output stream between bloom++ stream and std stream. " alt="" coords="202,155,383,181"/>
+<area shape="rect" id="node7" href="$d3/d4b/classbloom_1_1stream_1_1iostring.html" title="Input/Output text stream. " alt="" coords="502,155,673,181"/>
+</map>
