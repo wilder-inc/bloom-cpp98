@@ -1,0 +1,12 @@
+prefix=/usr/local
+exec_prefix=${prefix}
+libdir=${exec_prefix}/lib
+includedir=${prefix}/include
+
+Name: Bloom++
+Description: Fast C++ tools.
+URL: 
+Version: 1.4.34-dev
+Requires: 
+Libs: -lbloom++
+Cflags: -I/usr/local/include/
