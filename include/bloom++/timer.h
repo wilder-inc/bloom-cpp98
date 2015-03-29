@@ -28,7 +28,7 @@ namespace bloom
 
 
 /**
- * @brief Timer in seconds.
+ * @brief Timer in milliseconds.
  */
 template<class T>
 class timer

@@ -35,19 +35,17 @@ namespace bloom
 {
 
 /**
- * @brief Like std::string, but faster.
+ * @brief Like std::string.
  * 
- * Using allocaion memory step size to reduse the
- * number of invokes realloc function.
  */
 typedef class string_t<char> string;
 
 std::ostream& operator<< (std::ostream&o, const bloom::string& str);
 
 /**
- * wstring
- * Like std::wstring, but faster.
- * In developing...
+ * @brief Like std::wstring.
+ * 
+ * In develop...
  */
 typedef class string_t<short> wstring;
 

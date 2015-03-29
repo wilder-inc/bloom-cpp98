@@ -243,6 +243,9 @@ mem_fun(T_Obj *obj, T_Ret (T_Obj::*fn)(T_Par1, T_Par2, T_Par3, T_Par4, T_Par5, T
     return shared_ptr<slot_base6<T_Ret, T_Par1, T_Par2, T_Par3, T_Par4, T_Par5, T_Par6> >(new mem_slot6<T_Ret, T_Obj, T_Par1, T_Par2, T_Par3, T_Par4, T_Par5, T_Par6>(obj, fn));
 }
 
+/**
+ * @brief Signal without parameters.
+ */
 template<class T_Ret>
 class signal0
 {
@@ -265,6 +268,9 @@ protected:
     /// @endcond
 };
 
+/**
+ * @brief Signal with 1 parameter.
+ */
 template<class T_Ret, class T_Par1>
 class signal1
 {
@@ -287,6 +293,9 @@ protected:
     /// @endcond
 };
 
+/**
+ * @brief Signal with 2 parameters.
+ */
 template<class T_Ret, class T_Par1, class T_Par2>
 class signal2
 {
@@ -309,6 +318,9 @@ protected:
     /// @endcond
 };
 
+/**
+ * @brief Signal with 3 parameters.
+ */
 template<class T_Ret, class T_Par1, class T_Par2, class T_Par3>
 class signal3
 {
@@ -331,6 +343,9 @@ protected:
     /// @endcond
 };
 
+/**
+ * @brief Signal with 4 parameters.
+ */
 template<class T_Ret, class T_Par1, class T_Par2, class T_Par3, class T_Par4>
 class signal4
 {
@@ -353,6 +368,9 @@ protected:
     /// @endcond
 };
 
+/**
+ * @brief Signal with 5 parameters.
+ */
 template<class T_Ret, class T_Par1, class T_Par2, class T_Par3, class T_Par4, class T_Par5>
 class signal5
 {
@@ -375,6 +393,9 @@ protected:
     /// @endcond
 };
 
+/**
+ * @brief Signal with 6 parameters.
+ */
 template<class T_Ret, class T_Par1, class T_Par2, class T_Par3, class T_Par4, class T_Par5, class T_Par6>
 class signal6
 {
