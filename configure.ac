@@ -1,5 +1,5 @@
-define(BL_VERSION,1)
-define(BL_MAJOR,4)
+define(BL_VERSION,0)
+define(BL_MAJOR,1)
 define(BL_MINOR,34)
 define(BL_LOCALVER,-dev)
 #
