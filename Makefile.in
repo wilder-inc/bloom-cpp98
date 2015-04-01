@@ -865,7 +865,7 @@ uninstall-am: uninstall-pkgconfigDATA
 $(pkgconfig_DATA): config.status
 
 uninstall-hook:
-	rm -Rf $(includedir)/bloom++
+	rm -Rf $(DESTDIR)$(includedir)/bloom++
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

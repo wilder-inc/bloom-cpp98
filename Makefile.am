@@ -16,4 +16,4 @@ pkgconfigdir = $(libdir)/pkgconfig
 $(pkgconfig_DATA): config.status
 
 uninstall-hook:
-	rm -Rf $(includedir)/bloom++
+	rm -Rf $(DESTDIR)$(includedir)/bloom++
