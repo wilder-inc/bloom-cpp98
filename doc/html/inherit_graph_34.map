@@ -1,3 +1,13 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$df/d0d/classbloom_1_1vector.html" title="The vector class. " alt="" coords="5,5,160,32"/>
+<area shape="rect" id="node1" href="$d5/dc1/classbloom_1_1stream_1_1i__base.html" title="Input stream base class. " alt="" coords="8,157,173,184"/>
+<area shape="rect" id="node2" href="$d8/d40/classbloom_1_1stream_1_1io__base.html" title="Base input/output stream class. " alt="" coords="227,157,400,184"/>
+<area shape="rect" id="node6" href="$d1/d7c/classbloom_1_1stream_1_1istream.html" title="Input stream from std::istream to bloom. " alt="" coords="227,208,400,235"/>
+<area shape="rect" id="node7" href="$de/d87/classbloom_1_1stream_1_1istring.html" title="Input text stream. " alt="" coords="232,107,395,133"/>
+<area shape="rect" id="node3" href="$da/d31/classbloom_1_1net_1_1tcp_1_1iostream.html" title="Input/output stream for TCP Connection. " alt="" coords="451,157,635,184"/>
+<area shape="rect" id="node4" href="$d3/da0/classbloom_1_1stream_1_1iobuffer.html" title="Stream buffer. " alt="" coords="457,208,629,235"/>
+<area shape="rect" id="node5" href="$d2/da4/classbloom_1_1stream_1_1iostream.html" title="Input/Output stream between bloom++ stream and std stream. " alt="" coords="452,107,633,133"/>
+<area shape="rect" id="node8" href="$d3/d4b/classbloom_1_1stream_1_1iostring.html" title="Input/Output text stream. " alt="" coords="457,56,628,83"/>
+<area shape="rect" id="node9" href="$d1/d8a/classbloom_1_1stream_1_1o__base.html" title="Output stream base class. " alt="" coords="5,56,176,83"/>
+<area shape="rect" id="node10" href="$df/d84/classbloom_1_1stream_1_1ostream.html" title="Output stream from bloom to std::ostream. " alt="" coords="224,5,403,32"/>
+<area shape="rect" id="node11" href="$d6/d50/classbloom_1_1stream_1_1ostring.html" title="Output text stream. " alt="" coords="229,56,397,83"/>
 </map>

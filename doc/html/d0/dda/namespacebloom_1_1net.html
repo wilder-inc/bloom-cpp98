@@ -86,7 +86,9 @@ var searchBox = new SearchBox("searchBox", "../../search",false,'Search');
 </div><!-- top -->
 <div class="header">
   <div class="summary">
-<a href="#namespaces">Namespaces</a>  </div>
+<a href="#namespaces">Namespaces</a> &#124;
+<a href="#nested-classes">Classes</a> &#124;
+<a href="#enum-members">Enumerations</a>  </div>
   <div class="headertitle">
 <div class="title">bloom::net Namespace Reference</div>  </div>
 </div><!--header-->
@@ -103,13 +105,48 @@ Namespaces</h2></td></tr>
 <tr class="memitem:d7/d20/namespacebloom_1_1net_1_1udp"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/d20/namespacebloom_1_1net_1_1udp.html">udp</a></td></tr>
 <tr class="memdesc:d7/d20/namespacebloom_1_1net_1_1udp"><td class="mdescLeft">&#160;</td><td class="mdescRight">UDP library. <br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
+Classes</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/def/classbloom_1_1net_1_1addr__ipv4.html">addr_ipv4</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">IPv4 address.  <a href="../../d8/def/classbloom_1_1net_1_1addr__ipv4.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/d62/classbloom_1_1net_1_1socket__base.html">socket_base</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Base class for sockets.  <a href="../../dc/d62/classbloom_1_1net_1_1socket__base.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="enum-members"></a>
+Enumerations</h2></td></tr>
+<tr class="memitem:ac96937c067b100233aeb5baeb416dca3"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac96937c067b100233aeb5baeb416dca3"></a>enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d0/dda/namespacebloom_1_1net.html#ac96937c067b100233aeb5baeb416dca3">return_value</a> { <br />
+&#160;&#160;<b>sock_OK</b> = 0, 
+<b>sock_ERROR</b> = -1, 
+<b>sock_FD_ERROR</b> = -2, 
+<b>sock_BIND_ERROR</b> = -3, 
+<br />
+&#160;&#160;<b>sock_SELECT_ERROR</b> = -4, 
+<b>sock_ACCEPT_ERROR</b> = -5, 
+<b>sock_CONNECT_ERROR</b> = -6, 
+<b>sock_IPADDR_ERROR</b> = -7, 
+<br />
+&#160;&#160;<b>sock_TIMEOUT</b> = -8, 
+<b>sock_BUSY</b> = -9, 
+<b>sock_SELECT_NOTHING</b> = -10, 
+<b>sock_SELECT_READY</b> = -11
+<br />
+ }</td></tr>
+<tr class="memdesc:ac96937c067b100233aeb5baeb416dca3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return values for sockets functions. <br /></td></tr>
+<tr class="separator:ac96937c067b100233aeb5baeb416dca3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac1cd1f04720bc363eb05d9440a86a930"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac1cd1f04720bc363eb05d9440a86a930"></a>enum &#160;</td><td class="memItemRight" valign="bottom"><b>select_type</b> { <b>select_Write</b> = 1, 
+<b>select_Read</b> = 2
+ }</td></tr>
+<tr class="separator:ac1cd1f04720bc363eb05d9440a86a930"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Networks library. </p>
 </div></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Mar 30 2015 02:17:11 by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Mon Apr 6 2015 03:59:26 by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="../../doxygen.png" alt="doxygen"/>
 </a> 1.8.9.1
 </small></address>
