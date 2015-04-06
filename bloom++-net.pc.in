@@ -1,0 +1,12 @@
+prefix=@prefix@
+exec_prefix=@exec_prefix@
+libdir=@libdir@
+includedir=@includedir@
+
+Name: Bloom++
+Description: Fast C++ tools.
+URL: 
+Version: @VERSION@
+Requires: 
+Libs: -lbloom++-net
+Cflags: -I@prefix@/include/
