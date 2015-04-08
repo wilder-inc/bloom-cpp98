@@ -12,7 +12,7 @@ libbloom___la_SOURCES = \
 	time.cpp \
 	condition_variable.cpp
 
-libbloom___la_LIBADD =
+libbloom___la_LIBADD = \
 	stream/libbloom++-io.la
 
 AM_CPPFLAGS = -I$(top_builddir)/include

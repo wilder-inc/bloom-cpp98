@@ -130,7 +130,7 @@ am__uninstall_files_from_dir = { \
   }
 am__installdirs = "$(DESTDIR)$(libdir)"
 LTLIBRARIES = $(lib_LTLIBRARIES)
-libbloom___la_DEPENDENCIES =
+libbloom___la_DEPENDENCIES = stream/libbloom++-io.la
 am_libbloom___la_OBJECTS = debug.lo hash_functions.lo log.lo string.lo \
 	time.lo condition_variable.lo
 libbloom___la_OBJECTS = $(am_libbloom___la_OBJECTS)
@@ -380,7 +380,9 @@ libbloom___la_SOURCES = \
 	time.cpp \
 	condition_variable.cpp
 
-libbloom___la_LIBADD = 
+libbloom___la_LIBADD = \
+	stream/libbloom++-io.la
+
 AM_CPPFLAGS = -I$(top_builddir)/include
 all: all-recursive
 
@@ -776,7 +778,6 @@ uninstall-am: uninstall-libLTLIBRARIES
 
 .PRECIOUS: Makefile
 
-	stream/libbloom++-io.la
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
