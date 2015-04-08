@@ -1,5 +1,6 @@
 SUBDIRS = \
-	stream 
+	stream \
+	net
 
 lib_LTLIBRARIES = libbloom++.la
 

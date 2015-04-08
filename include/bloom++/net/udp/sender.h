@@ -55,6 +55,8 @@ public:
     bool is_closing() const;
     
     const addr_ipv4 &socket_addr() const;
+    bloom::string get_if_name() const;
+    int get_MAC(const string &ifaddr, char *mac) const;
     
     unsigned int hash() const;
     

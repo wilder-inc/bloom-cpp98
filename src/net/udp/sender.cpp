@@ -67,6 +67,16 @@ unsigned int sender::hash() const
     return socket_->hash();
 }
 
+bloom::string sender::get_if_name() const
+{
+    return socket_->get_if_name();
+}
+
+int sender::get_MAC(const string &ifaddr, char *mac) const
+{
+    return socket_->get_MAC(ifaddr, mac);
+}
+
 } //namespace udp
 
 } //namespace net

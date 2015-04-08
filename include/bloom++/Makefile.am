@@ -1,7 +1,8 @@
 
 SUBDIRS = \
 	_bits \
-	stream
+	stream \
+	net
 
 libbloompp_includedir = $(includedir)/bloom++
 libbloompp_include_HEADERS = \

@@ -1,6 +1,6 @@
 define(BL_VERSION,0)
-define(BL_MAJOR,1)
-define(BL_MINOR,34)
+define(BL_MAJOR,2)
+define(BL_MINOR,2)
 define(BL_LOCALVER,-dev)
 #
 # bloom++ configuration
@@ -15,8 +15,8 @@ LT_INIT
 AM_INIT_AUTOMAKE
 AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_SRCDIR([.])
-#AC_CONFIG_HEADERS([config.h])
-AC_CONFIG_FILES([bloom++.pc])
+AC_CONFIG_HEADERS([config.h])
+AC_CONFIG_FILES([bloom++.pc bloom++-net.pc])
 
 # Checks for programs.
 AC_PROG_CXX
@@ -57,7 +57,13 @@ AC_CONFIG_FILES([Makefile
                  include/bloom++/Makefile
                  include/bloom++/_bits/Makefile
                  include/bloom++/stream/Makefile
+                 include/bloom++/net/Makefile
+                 include/bloom++/net/tcp/Makefile
+                 include/bloom++/net/udp/Makefile
                  src/Makefile
                  src/stream/Makefile
+                 src/net/Makefile
+                 src/net/udp/Makefile
+                 src/net/tcp/Makefile
 ])
 AC_OUTPUT

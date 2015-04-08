@@ -9,7 +9,8 @@ EXTRA_DIST = \
 	LICENSE
 
 pkgconfig_DATA = \
-	bloom++.pc
+	bloom++.pc \
+	bloom++-net.pc
 
 pkgconfigdir = $(libdir)/pkgconfig
 

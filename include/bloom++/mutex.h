@@ -75,6 +75,54 @@ public:
     };
     
     /**
+     * @brief Locking mutex until the object of this class exists.
+     * 
+     * Using unlock() and lock() methods for temporary unlocking.
+     */
+    class unique_lock
+    {
+    public:
+        friend condition_variable;
+        
+        unique_lock(mutex& m, bool b_lock = true) : m_(m), bLocked_(b_lock)
+        {
+            if(b_lock)
+                m_.lock();
+        }
+        
+        ~unique_lock()
+        {
+            if(bLocked_)
+                m_.unlock();
+        }
+        
+        void lock()
+        {
+            if(!bLocked_){
+                m_.lock();
+                bLocked_ = true;
+            }
+        }
+        
+        int trylock()
+        {
+            return m_.trylock();
+        }
+        
+        void unlock()
+        {
+            if(bLocked_){
+                m_.unlock();
+                bLocked_ = false;
+            }
+        }
+        
+    private:
+        mutex& m_;
+        bool bLocked_;
+    };
+    
+    /**
      * @brief Trying to Lock mutex until the object of this class exists.
      * Mutex not be locked if who already locked in this thread...
      */
