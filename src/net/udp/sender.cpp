@@ -35,13 +35,7 @@ sender::sender(shared_ptr<socket> sock): socket_(sock)
 {
 }
 
-size_t sender::send(const char* data, size_t len)
-{
-    mutex::scoped_lock sl(send_m_);
-    return socket_->send(data, len);
-}
-
-size_t sender::sendto(const addr_ipv4& dest, const char* data, size_t len)
+size_t sender::sendto(const addr_ipv4& dest, const char* data, size_t size)
 {
     mutex::scoped_lock sl(send_m_);
     return socket_->sendto(dest, data, len);

@@ -40,6 +40,9 @@ class sender;
 
 typedef class receiver_t<sender> receiver;
 
+/**
+ * @brief Data sender for udp-sockets.
+ */
 class sender
 {
 public:
@@ -48,8 +51,15 @@ public:
     
     explicit sender(shared_ptr<socket> sock);
     
-    size_t send(const char * data, size_t len);
-    size_t sendto(const addr_ipv4& dest, const char * data, size_t len);
+    /**
+     * @brief Send data to dest.
+     * 
+     * @param dest IP address of receiver.
+     * @param data Data for send.
+     * @param size Size of sending data.
+     * @return Size of sended or errorcode.
+     */
+    size_t sendto(const addr_ipv4& dest, const char * data, size_t size);
     
     void close();
     bool is_closing() const;

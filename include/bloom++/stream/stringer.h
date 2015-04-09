@@ -36,6 +36,9 @@ namespace bloom
 namespace stream
 {
 
+/**
+ * @brief In/out stream wrapper for strings.
+ */
 class stringer: public io_base
 {
 private:

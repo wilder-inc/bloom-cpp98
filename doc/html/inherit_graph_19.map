@@ -1,5 +1,0 @@
-<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$dc/d62/classbloom_1_1net_1_1socket__base.html" title="Base class for sockets. " alt="" coords="5,31,184,57"/>
-<area shape="rect" id="node2" href="$d2/dc2/classbloom_1_1net_1_1tcp_1_1socket.html" title="TCP Socket. " alt="" coords="234,5,403,32"/>
-<area shape="rect" id="node3" href="$d1/d28/classbloom_1_1net_1_1udp_1_1socket.html" title="UDP Socket. " alt="" coords="232,56,405,83"/>
-</map>

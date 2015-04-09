@@ -1,6 +1,0 @@
-<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$d9/dae/classbloom_1_1list__t.html" title="bloom::list_t\&lt; kvT \&gt;" alt="" coords="5,42,156,69"/>
-<area shape="rect" id="node2" href="$dc/dd9/classbloom_1_1set__t.html" title="bloom::set_t\&lt; kvT,\l hashT \&gt;" alt="" coords="204,35,347,76"/>
-<area shape="rect" id="node3" href="$d8/d90/classbloom_1_1mt__set.html" title="Multi&#45;thread safe set. " alt="" coords="411,5,565,47"/>
-<area shape="rect" id="node4" href="$d9/d3b/classbloom_1_1set.html" title="Set. " alt="" coords="395,71,581,98"/>
-</map>

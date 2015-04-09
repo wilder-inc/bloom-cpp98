@@ -44,6 +44,7 @@ public:
     
     /**
      * @brief Initialize socket if not initialized and bind to address.
+     * 
      * @param addr Address to bind.
      * @return Status of bind. sock_OK if not errors.
      */
