@@ -13,11 +13,11 @@ features of their.
 
   **Bloom-cpp98** implemented a few **C++11** features:
   - Smart pointers (**shared_ptr**, **unique_ptr**).
-  - thread.
+  - **thread**.
   - **mutex**, **scoped_lock**(lock_guard), **unique_lock**.
   - **condition_variable**.
   - Containers (**list**, **set**, **hash_table**, **string**).
-  
+
   Also some additional **Bloom++** features:
   - Multi-Thread safe containers (**mt_list**, **mt_set**, **mt_hash_table**).
   - Functional logger.
@@ -36,6 +36,6 @@ features of their.
     Working with SQL servers using dynamic and shared libraries.
     
 ### Author:
-*Sergei <Wilder> Khairulin  _<sergei.khairulin@gmail.com>_*
+**Sergei <Wilder> Khairulin** <sergei.khairulin@gmail.com>
 
   
