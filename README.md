@@ -36,6 +36,6 @@ features of their.
     Working with SQL servers using dynamic and shared libraries.
     
 ### Author:
-**Sergei <Wilder> Khairulin** <sergei.khairulin@gmail.com>
+**Sergei <Wilder> Khairulin** \<sergei.khairulin@gmail.com\>
 
   
