@@ -1,10 +1,11 @@
 <img src=bloom++-logo.png>
+
 **C++** Features for **C++11** and **C++98**.
 
-### bloom-cpp98
+## bloom-cpp98
 C++ Features Library for POSIX systems (over c++98).
 
-### Description:
+## Description:
 
   **Bloom-cpp98** is a small library which contain many useful and simply
 implemented featrures for **C++**. This library can help you to develop
@@ -38,7 +39,7 @@ features of their.
   - ODBC Session ( IN DEVELOP ).
     Working with SQL servers using dynamic and shared libraries.
 
-##### Author:
+## Author:
 
 **Sergei Khairulin** \<sergei.khairulin@gmail.com\>
 
