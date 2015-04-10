@@ -1,6 +1,7 @@
-#<img src=bloom++-logo.png>
+###<img src=bloom++-logo.png> **C++** Features for **C++11** and **C++98**.
 
-C++ Extensions Library for POSIX systems (over c++98).
+## bloom-cpp98
+C++ Features Library for POSIX systems (over c++98).
 
 ### Description:
 
@@ -36,6 +37,6 @@ features of their.
     Working with SQL servers using dynamic and shared libraries.
     
 ### Author:
-**Sergei <Wilder> Khairulin** \<sergei.khairulin@gmail.com\>
+**Sergei Khairulin** \<sergei.khairulin@gmail.com\>
 
   
