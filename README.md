@@ -1,5 +1,4 @@
 <img src=bloom++-logo.png>
-
 **C++** Features for **C++11** and **C++98**.
 
 ## bloom-cpp98
