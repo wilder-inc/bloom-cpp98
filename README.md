@@ -1,8 +1,8 @@
-<img src=bloom++-logo.png>
+#<img src=bloom++-logo.png>
 
 C++ Extensions Library for POSIX systems (over c++98).
 
-## Description:
+### Description:
 
   **Bloom-cpp98** is a small library which contain many useful and simply
 implemented featrures for **C++**. This library can help you to develop
@@ -18,7 +18,7 @@ features of their.
   - **condition_variable**.
   - Containers (**list**, **set**, **hash_table**, **string**).
   
-  Also some additional **Bloom++** features.
+  Also some additional **Bloom++** features:
   - Multi-Thread safe containers (**mt_list**, **mt_set**, **mt_hash_table**).
   - Functional logger.
   - Network library (Sockets, TCP Server/Clien, UDP Communicator).
@@ -35,7 +35,7 @@ features of their.
   - ODBC Session ( IN DEVELOP ).
     Working with SQL servers using dynamic and shared libraries.
     
-## Author:
+### Author:
 *Sergei <Wilder> Khairulin  _<sergei.khairulin@gmail.com>_*
 
   
