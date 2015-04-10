@@ -3,7 +3,7 @@
 C++ Features Lipraries for **C++98** and **C++11**.
 
 ## bloom-cpp98
-C++ Features Library for POSIX systems (over C++98).
+C++ Features Library for POSIX systems (over **C++98**).
 
 ## Description:
 
