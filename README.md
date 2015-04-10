@@ -1,9 +1,9 @@
 ######<img src=bloom++-logo.png> **C++** Features for **C++11** and **C++98**.
 
-## bloom-cpp98
+#### bloom-cpp98
 C++ Features Library for POSIX systems (over c++98).
 
-### Description:
+##### Description:
 
   **Bloom-cpp98** is a small library which contain many useful and simply
 implemented featrures for **C++**. This library can help you to develop
@@ -19,6 +19,7 @@ features of their.
   - **condition_variable**.
   - Containers (**list**, **set**, **hash_table**, **string**).
 
+
   Also some additional **Bloom++** features:
   - Multi-Thread safe containers (**mt_list**, **mt_set**, **mt_hash_table**).
   - Functional logger.
@@ -26,7 +27,7 @@ features of their.
   - Dynamic library ( IN DEVELOP ).
     Is a implementation of dynamic types, dynamic classes and objects.
   - Shared library ( IN DEVELOP ).
-    Shared containers with shared objects providing:
+      Shared containers with shared objects providing:
       - to destroy object after removing from the last container.
       - to remove object from all containers which are contains it
       at time of destroying.
@@ -35,8 +36,9 @@ features of their.
   - FCGI-Server ( IN DEVELOP ).
   - ODBC Session ( IN DEVELOP ).
     Working with SQL servers using dynamic and shared libraries.
-    
-### Author:
+
+##### Author:
+
 **Sergei Khairulin** \<sergei.khairulin@gmail.com\>
 
   
