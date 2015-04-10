@@ -1,25 +1,26 @@
 # bloom-cpp98
 
+<img src=bloom++-logo.png>
 C++ Extensions Library for POSIX systems (over c++98).
 
 ## Description:
 
-  *Bloom-cpp98* is a small library which contain many useful and simply
-implemented featrures for *C++*. This library can help you to develop
+  **Bloom-cpp98** is a small library which contain many useful and simply
+implemented featrures for **C++**. This library can help you to develop
 multi-threaded applications, network application and database 
 applications. Also bloom-cpp98 can be used to develop projects in 
-which no possibility or desire to use *Boost/C++11* but you need some 
+which no possibility or desire to use **Boost/C++11** but you need some 
 features of their.
 
-  *Bloom-cpp98* implemented a few *C++11* features:
+  **Bloom-cpp98** implemented a few **C++11** features:
   - Smart pointers (**shared_ptr**, **unique_ptr**).
   - thread.
   - **mutex**, **scoped_lock**(lock_guard), **unique_lock**.
   - **condition_variable**.
   - Containers (**list**, **set**, **hash_table**, **string**).
   
-  Also some additional *Bloom++* features.
-  - Multi-Thread safe containers (*mt_list*, *mt_set*, *mt_hash_table*).
+  Also some additional **Bloom++** features.
+  - Multi-Thread safe containers (**mt_list**, **mt_set**, **mt_hash_table**).
   - Functional logger.
   - Network library (Sockets, TCP Server/Clien, UDP Communicator).
   - Dynamic library ( IN DEVELOP ).
@@ -36,6 +37,6 @@ features of their.
     Working with SQL servers using dynamic and shared libraries.
     
 ## Author:
-*Sergei <Wilder> Khairulin  <sergei.khairulin@gmail.com>*
+*Sergei <Wilder> Khairulin  _<sergei.khairulin@gmail.com>_*
 
   
