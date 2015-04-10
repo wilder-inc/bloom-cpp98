@@ -1,4 +1,4 @@
-<img src=bloom++-logo.png> ## bloom-cpp98
+<img src=bloom++-logo.png>
 
 C++ Extensions Library for POSIX systems (over c++98).
 
