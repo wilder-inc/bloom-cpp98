@@ -1,6 +1,6 @@
 define(BL_VERSION,0)
 define(BL_MAJOR,2)
-define(BL_MINOR,2)
+define(BL_MINOR,3)
 define(BL_LOCALVER,-dev)
 #
 # bloom++ configuration
