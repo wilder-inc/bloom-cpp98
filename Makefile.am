@@ -6,7 +6,8 @@ SUBDIRS = \
 EXTRA_DIST = \
 	Doxyfile.config \
 	bloom++-logo.png \
-	COPYING
+	COPYING \
+	README.md
 
 pkgconfig_DATA = \
 	bloom++.pc \

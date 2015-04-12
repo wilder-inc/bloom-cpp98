@@ -49,7 +49,8 @@ select_timeout_usec_(select_timeout_usec),
 bBlocking_((select_timeout_sec==select_timeout_usec&&
             select_timeout_sec==0)?true:false),
 bStopping_(false),
-socket_(new socket)
+socket_(new socket),
+sender_(new sender(socket_))
 {
     for (int i = 0; i < numExecutors_; ++i)
     {
@@ -85,7 +86,6 @@ int communicator::bind(const addr_ipv4& ipaddr)
         DEBUG_WARN("bind faild\n");
         return sock_BIND_ERROR;
     }
-    sender_.reset(new sender(socket_));
     cvExecutors_.notify_all();
     return sock_OK;
 }
@@ -100,7 +100,6 @@ int communicator::multicast(const addr_ipv4& group, const addr_ipv4& src_iface)
         DEBUG_WARN("multicast faild\n");
         return sock_ERROR;
     }
-    sender_.reset(new sender(socket_));
     cvExecutors_.notify_all();
     return sock_OK;
 }
@@ -142,14 +141,14 @@ void communicator::runExecutor()
     {
         {
             mutex::scoped_lock sl(mutexExecutors_);
-            if(!sender_.get()){
+            if(sender_->is_closing()){
                 if(bStopping_){
                     r.reset_connection();
                     s.reset();
                     break;
                 }
                 cvExecutors_.wait(mutexExecutors_);
-                if(bStopping_ && !sender_.get()){
+                if(bStopping_ && sender_->is_closing()){
                     r.reset_connection();
                     s.reset();
                     break;
@@ -158,11 +157,6 @@ void communicator::runExecutor()
                     s = sender_;
                     r.set_connection(s);
                 }
-            }
-            else if(sender_->is_closing()){
-                DEBUG_INFO("Socket need closing!\n");
-                sender_.reset();
-                continue;
             }
         }
         
