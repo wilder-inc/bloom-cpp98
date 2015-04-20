@@ -44,8 +44,29 @@ struct list_iterable_base
  */
 template<class vT>
 struct list_iterable_t: public list_iterable_base
-{   
-    list_iterable_t<vT>(const vT &v):value_(v){}
+{  
+    list_iterable_t<vT>(){}
+    
+    template<class P1>
+    list_iterable_t<vT>(P1 p1): value_(p1){}
+    
+    template<class P1, class P2>
+    list_iterable_t<vT>(P1 p1, P2 p2): value_(p1, p2){}
+    
+    template<class P1, class P2, class P3>
+    list_iterable_t<vT>(P1 p1, P2 p2, P3 p3): value_(p1, p2, p3){}
+    
+    template<class P1, class P2, class P3, class P4>
+    list_iterable_t<vT>(P1 p1, P2 p2, P3 p3, P4 p4): value_(p1, p2, p3, p4){}
+    
+    template<class P1, class P2, class P3, class P4, class P5>
+    list_iterable_t<vT>(P1 p1, P2 p2, P3 p3, P4 p4, P5 p5): 
+        value_(p1, p2, p3, p4, p5){}
+    
+    template<class P1, class P2, class P3, class P4, class P5, class P6>
+    list_iterable_t<vT>(P1 p1, P2 p2, P3 p3, P4 p4, P5 p5, P6 p6): 
+        value_(p1, p2, p3, p4, p5, p6){}
+    
     vT value_;
 };
 

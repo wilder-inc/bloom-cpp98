@@ -1,6 +1,6 @@
 define(BL_VERSION,0)
-define(BL_MAJOR,2)
-define(BL_MINOR,3)
+define(BL_MAJOR,3)
+define(BL_MINOR,0)
 define(BL_LOCALVER,-dev)
 #
 # bloom++ configuration
@@ -57,11 +57,13 @@ AC_CONFIG_FILES([Makefile
                  include/bloom++/Makefile
                  include/bloom++/_bits/Makefile
                  include/bloom++/stream/Makefile
+                 include/bloom++/shared/Makefile
                  include/bloom++/net/Makefile
                  include/bloom++/net/tcp/Makefile
                  include/bloom++/net/udp/Makefile
                  src/Makefile
                  src/stream/Makefile
+                 src/shared/Makefile
                  src/net/Makefile
                  src/net/udp/Makefile
                  src/net/tcp/Makefile

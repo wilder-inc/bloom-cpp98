@@ -22,6 +22,7 @@
 #include <string.h>
 #include <bloom++/time.h>
 #include <bloom++/_bits/c++config.h>
+#include <bloom++/exception.h>
 
 #ifdef LINUX
 #include <time.h>
@@ -68,15 +69,14 @@ void swapbytes(void *object, size_t size)
    }
 }
 
-long get_milli_sec()
+long get_milli_sec() throw()
 {
     struct timeval tv;
     long ret;
 #ifdef LINUX
     if (gettimeofday(&tv, 0))
     {
-        BLOOM_FAILED("get_milli_sec: gettimeofday failed...");
-        return 0;
+        throw exception("get_milli_sec: gettimeofday failed...");
     }
     ret = tv.tv_sec * 1000l;
     ret += tv.tv_usec / 1000l;

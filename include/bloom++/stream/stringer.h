@@ -23,7 +23,7 @@
 
 #include <bloom++/string.h>
 #include <bloom++/stream/io.h>
-#include <bloom++/stream/iobuffer.h>
+#include <bloom++/stream/iostring.h>
 
 #ifdef STREAM_DEBUG
 #define __BLOOM_WITH_DEBUG
@@ -63,5 +63,206 @@ private:
 };
 
 } //namespace stream
+
+/**
+ * Fast string builder.
+ * @param p1 String element.
+ * @return string
+ */
+template<class P1>
+string fast_ostring(P1 p1)
+{
+    string out;
+    stream::stringer s(out);
+    stream::ostring os(s);
+    os<<p1;
+    return out;
+}
+
+/**
+ * Fast string builder.
+ * @param p1 First string element.
+ * @param p2 Second string element.
+ * @return string
+ */
+template<class P1, class P2>
+string fast_ostring(P1 p1, P2 p2)
+{
+    string out;
+    stream::stringer s(out);
+    stream::ostring os(s);
+    os<<p1<<p2;
+    return out;
+}
+
+/**
+ * Fast string builder.
+ * @param p1 First string element.
+ * @param p2 Second string element.
+ * @param p3 3th string element.
+ * @return string
+ */
+template<class P1, class P2, class P3>
+string fast_ostring(P1 p1, P2 p2, P3 p3)
+{
+    string out;
+    stream::stringer s(out);
+    stream::ostring os(s);
+    os<<p1<<p2<<p3;
+    return out;
+}
+
+/**
+ * Fast string builder.
+ * @param p1 First string element.
+ * @param p2 Second string element.
+ * @param p3 3th string element.
+ * @param p4 4th string element.
+ * @return string.
+ */
+template<class P1, class P2, class P3, class P4>
+string fast_ostring(P1 p1, P2 p2, P3 p3, P4 p4)
+{
+    string out;
+    stream::stringer s(out);
+    stream::ostring os(s);
+    os<<p1<<p2<<p3<<p4;
+    return out;
+}
+
+/**
+ * Fast string builder.
+ * @param p1 First string element.
+ * @param p2 Second string element.
+ * @param p3 3th string element.
+ * @param p4 4th string element.
+ * @param p5 5th string element.
+ * @return string.
+ */
+template<class P1, class P2, class P3, class P4, class P5>
+string fast_ostring(P1 p1, P2 p2, P3 p3, P4 p4, P5 p5)
+{
+    string out;
+    stream::stringer s(out);
+    stream::ostring os(s);
+    os<<p1<<p2<<p3<<p4<<p5;
+    return out;
+}
+
+/**
+ * Fast string builder.
+ * @param p1 First string element.
+ * @param p2 Second string element.
+ * @param p3 3th string element.
+ * @param p4 4th string element.
+ * @param p5 5th string element.
+ * @param p6 6th string element.
+ * @return 
+ */
+template<class P1, class P2, class P3, class P4, class P5, class P6>
+string fast_ostring(P1 p1, P2 p2, P3 p3, P4 p4, P5 p5, P6 p6)
+{
+    string out;
+    stream::stringer s(out);
+    stream::ostring os(s);
+    os<<p1<<p2<<p3<<p4<<p5<<p6;
+    return out;
+}
+
+/**
+ * Fast string builder.
+ * @param p1 First string element.
+ * @param p2 Second string element.
+ * @param p3 3th string element.
+ * @param p4 4th string element.
+ * @param p5 5th string element.
+ * @param p6 6th string element.
+ * @param p7 7th string element.
+ * @return 
+ */
+template<class P1, class P2, class P3, class P4, class P5, class P6, class P7>
+string fast_ostring(P1 p1, P2 p2, P3 p3, P4 p4, P5 p5, P6 p6, P7 p7)
+{
+    string out;
+    stream::stringer s(out);
+    stream::ostring os(s);
+    os<<p1<<p2<<p3<<p4<<p5<<p6<<p7;
+    return out;
+}
+
+/**
+ * Fast string builder.
+ * @param p1 First string element.
+ * @param p2 Second string element.
+ * @param p3 3th string element.
+ * @param p4 4th string element.
+ * @param p5 5th string element.
+ * @param p6 6th string element.
+ * @param p7 7th string element.
+ * @param p8 8th string element.
+ * @return 
+ */
+template<class P1, class P2, class P3, class P4, class P5, class P6, 
+         class P7, class P8>
+string fast_ostring(P1 p1, P2 p2, P3 p3, P4 p4, P5 p5, P6 p6, P7 p7,
+                    P8 p8)
+{
+    string out;
+    stream::stringer s(out);
+    stream::ostring os(s);
+    os<<p1<<p2<<p3<<p4<<p5<<p6<<p7<<p8;
+    return out;
+}
+
+/**
+ * Fast string builder.
+ * @param p1 First string element.
+ * @param p2 Second string element.
+ * @param p3 3th string element.
+ * @param p4 4th string element.
+ * @param p5 5th string element.
+ * @param p6 6th string element.
+ * @param p7 7th string element.
+ * @param p8 8th string element.
+ * @param p9 9th string element.
+ * @return 
+ */
+template<class P1, class P2, class P3, class P4, class P5, class P6, 
+         class P7, class P8, class P9>
+string fast_ostring(P1 p1, P2 p2, P3 p3, P4 p4, P5 p5, P6 p6, P7 p7,
+                    P8 p8, P9 p9)
+{
+    string out;
+    stream::stringer s(out);
+    stream::ostring os(s);
+    os<<p1<<p2<<p3<<p4<<p5<<p6<<p7<<p8<<p9;
+    return out;
+}
+
+/**
+ * Fast string builder.
+ * @param p1 First string element.
+ * @param p2 Second string element.
+ * @param p3 3th string element.
+ * @param p4 4th string element.
+ * @param p5 5th string element.
+ * @param p6 6th string element.
+ * @param p7 7th string element.
+ * @param p8 8th string element.
+ * @param p9 9th string element.
+ * @param p10 10th string element.
+ * @return 
+ */
+template<class P1, class P2, class P3, class P4, class P5, class P6, 
+         class P7, class P8, class P9, class P10>
+string fast_ostring(P1 p1, P2 p2, P3 p3, P4 p4, P5 p5, P6 p6, P7 p7,
+                    P8 p8, P9 p9, P10 p10)
+{
+    string out;
+    stream::stringer s(out);
+    stream::ostring os(s);
+    os<<p1<<p2<<p3<<p4<<p5<<p6<<p7<<p8<<p9<<p10;
+    return out;
+}
 
 } //namespace bloom

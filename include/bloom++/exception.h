@@ -21,20 +21,32 @@
 
 #pragma once
 
+#include <bloom++/string.h>
 #include <exception>
+
 namespace bloom {
 
+/**
+ * Base exception class.
+ */
 class exception: public std::exception
 {
 protected:
-    const char *message_;
+    string message_;
         
 public:
-    exception(const char *msg):message_(msg){}
+    /**
+     * Constructor.
+     * @param msg Exception message.
+     */
+    exception(string msg);
+    
     virtual ~exception() throw(){}
-    virtual const char *what() throw(){
-        return message_;
-    }
+    virtual const char *what() throw();
 };
+
+
+#define BLOOM_DBGMSG(msg) fast_ostring(__FILE__,\
+            ": ", __LINE__, " [", __FUNCTION__, "] :", msg)
 
 } //namespace bloom

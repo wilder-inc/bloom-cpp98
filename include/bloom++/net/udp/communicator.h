@@ -38,7 +38,21 @@ namespace udp
 {
 
 /**
+ * Communicator exception.
+ */
+class communicator_exception: public exception
+{
+public:
+    communicator_exception(string msg):exception(msg){}
+    virtual ~communicator_exception() throw() {}
+};
+
+/**
  * @brief UDP communicator.
+ * This is a socket with a threads pool which emits executor signal if 
+ * there is incoming datagram. Next thread will emit executor signal
+ * after the current thread will free threads pool (after read_and_free or
+ * free methods invoked of receiver class).
  * 
  * @param numExecutors number of executors threads.
  * @param select_timeout_sec Select timeout sec.
@@ -55,11 +69,11 @@ public:
     
     signal2<bool, receiver &, sender & > &executor();
     
-    int bind(const addr_ipv4& ipaddr);
+    void bind(const addr_ipv4& ipaddr) throw();
 #ifdef LINUX
-    int multicast(const addr_ipv4 &group, const addr_ipv4 &src_iface);
+    void multicast(const addr_ipv4 &group, const addr_ipv4 &src_iface) throw();
 #endif
-    int allow_broadcast();
+    void allow_broadcast() throw();
     
     sender& get_sender();
     

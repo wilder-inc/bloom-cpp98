@@ -19,35 +19,18 @@
  *
  */
 
-#pragma once
+#include <bloom++/exception.h>
 
-#include <stdlib.h>
-#include <ostream>
-//#include <bloom++/stream/io.h>
-#include <bloom++/_bits/string_t.h>
 
-#ifdef AUX_DEBUG
-#define __BLOOM_WITH_DEBUG
-#endif
-#include <bloom++/_bits/debug.h>
+namespace bloom {
 
-namespace bloom
+exception::exception(string msg):
+message_(msg)
+{}
+
+const char *exception::what() throw()
 {
-
-/**
- * @brief Like std::string.
- * 
- */
-typedef class string_t<char> string;
-
-std::ostream& operator<< (std::ostream&o, const bloom::string& str);
-
-
-/**
- * @brief Like std::wstring.
- * 
- * In develop...
- */
-typedef class string_t<short> wstring;
+    return message_.c_str();
+}
 
 } //namespace bloom

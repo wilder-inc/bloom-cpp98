@@ -21,11 +21,23 @@
 
 #pragma once
 
+#include <bloom++/exception.h>
 #include <bloom++/_bits/list_t.h>
 #include <bloom++/_bits/list_iterator_t.h>
+#include <bloom++/exception.h>
 
 namespace bloom
 {
+
+/**
+ * List exception.
+ */
+class list_exception: public exception
+{
+public:
+    list_exception(string msg):exception(msg){}
+    virtual ~list_exception() throw() {}
+};
 
 /**
  * @brief List.
@@ -66,12 +78,14 @@ public:
         /// @endcond
     }
 
-    iterator erase(const iterator &it)
+    iterator erase(const iterator &it) throw()
     {
         /// @cond
         iterator r(it.element_->pNext_);
         if(it.element_ != base_list::end_iterable())
             delete base_list::exclude(it.element_);
+        else
+            throw list_exception("list::erase faild!");
         return r;
         /// @endcond
     }
@@ -92,47 +106,59 @@ public:
         /// @endcond
     }
 
-    vT & back()
+    vT & back() throw ()
     {
         /// @cond
+        if(!base_list::size())
+            throw list_exception("list::back failed, because container is empty!");
         return static_cast<iterable*>(base_list::end_iterable()->pPrev_)->value_;
         /// @endcond
     }
     
-    const vT & back() const
+    const vT & back() const throw()
     {
         /// @cond
+        if(!base_list::size())
+            throw list_exception("const list::back failed, because container is empty!");
         return static_cast<iterable*>(base_list::end_iterable()->pPrev_)->value_;
         /// @endcond
     }
 
-    vT & front()
+    vT & front() throw()
     {
         /// @cond
+        if(!base_list::size())
+            throw list_exception("list::front failed, because container is empty!");
         return static_cast<iterable*>(base_list::end_iterable()->pNext_)->value_;
         /// @endcond
     }
     
-    const vT & front() const
+    const vT & front() const throw()
     {
         /// @cond
+        if(!base_list::size())
+            throw list_exception("const list::front failed, because container is empty!");
         return static_cast<iterable*>(base_list::end_iterable()->pNext_)->value_;
         /// @endcond
     }
 
-    void pop_front()
+    void pop_front() throw()
     {
         /// @cond
         if(base_list::end_iterable()->pNext_ != base_list::end_iterable())
             delete base_list::exclude(base_list::end_iterable()->pNext_);
+        else
+            throw list_exception("list::pop_front failed, because container is empty!");
         /// @endcond
     }
 
-    void pop_back()
+    void pop_back() throw()
     {
         /// @cond
         if(base_list::end_iterable()->pPrev_ != base_list::end_iterable())
             delete base_list::exclude(base_list::end_iterable()->pPrev_);
+        else
+            throw list_exception("list::pop_back failed, because container is empty!");
         /// @endcond
     }
     

@@ -26,6 +26,7 @@
 #include <string.h>
 #include <bloom++/_bits/c++config.h>
 #include <bloom++/_bits/char_traits.h>
+#include <exception>
 
 #ifdef AUX_DEBUG
 #define __BLOOM_WITH_DEBUG
@@ -34,6 +35,21 @@
 
 namespace bloom
 {
+
+/**
+ * String exception.
+ */
+class string_exception: public std::exception
+{
+private:
+    const char *msg_;
+public:
+    string_exception(const char *msg):msg_(msg){}
+    virtual ~string_exception() throw() {}
+    virtual const char *what() throw(){
+        return msg_;
+    }
+};
 
 /**
  * @brief The string_t class.
@@ -346,21 +362,21 @@ public:
         /// @endcond
     }
     
-    Self& insert(size_t index, const vT *values, size_t size) {
+    Self& insert(size_t index, const vT *values, size_t size) throw(){
         /// @cond
         if(!size)return *this;
         if(index > rep_->size_)
-            BLOOM_FAILED("bloom::string::insert: out of range"); //throw
+            throw string_exception("bloom::string::insert: index out of range");
         insert_prepare(index, size);
         Traits::copy(rep_->data_ + index, values, size);
         return *this;
         /// @endcond
     }
     
-    Self& insert(size_t index, const Self &str){
+    Self& insert(size_t index, const Self &str) throw(){
         if(!str.rep_->size_)return *this;
         if(index > rep_->size_)
-            BLOOM_FAILED("bloom::string::insert: out of range");//throw
+            throw string_exception("bloom::string::insert: index out of range");
         if(&str == this){
             const size_t size = str.rep_->size_;
             insert_prepare(index, str.rep_->size_);
@@ -374,11 +390,11 @@ public:
         return *this;
     }
 
-    Self& replace(size_t index, const vT *values, size_t size) {
+    Self& replace(size_t index, const vT *values, size_t size) throw() {
         /// @cond
         if(!size)return *this;
         if(index+size > rep_->size_)
-            BLOOM_FAILED("bloom::string::replace: out of range");// throw
+            throw string_exception("bloom::string::replace: out of range");
         if(rep_->refcount_)
             rep_ = rep_->clone_for_replace(index, size);
         Traits::copy(rep_->data_ + index, values, size);
@@ -386,19 +402,19 @@ public:
         /// @endcond
     }
     
-    Self& replace(size_t index, const Self &str){
+    Self& replace(size_t index, const Self &str) throw(){
         if(&str == this){
             if(index)
-                BLOOM_FAILED("bloom::string::replace: trying to replace self by self with offset");// throw
+                throw string_exception("bloom::string::replace: trying to replace self by self with offset");
             return *this;
         }
         return replace(index, str.rep_->data_, str.rep_->size_);
     }
     
-    Self& replace(size_t index, size_t size, vT c) {
+    Self& replace(size_t index, size_t size, vT c) throw(){
         /// @cond
         if(index+size > rep_->size_)
-            BLOOM_FAILED("bloom::string::replace: out of range");// throw
+            throw string_exception("bloom::string::replace: out of range");
         if(rep_->refcount_)
             rep_ = rep_->clone_for_replace(index, size);
         Traits::assign(rep_->data_ + index, size, c);
@@ -406,11 +422,11 @@ public:
         /// @endcond
     }
     
-    Self& erase(size_t index, size_t size = 1) {
+    Self& erase(size_t index, size_t size = 1) throw(){
         /// @cond
         if(!size)return *this;
         if(index+size > rep_->size_)
-            BLOOM_FAILED("bloom::string::erase: out of range");// throw
+            throw string_exception("bloom::string::erase: out of range");
         
         const size_t new_size = rep_->size_ - size;
         
@@ -439,7 +455,7 @@ public:
         /// @cond
         if(index < rep_->size_)
             return rep_->data_[index];
-        BLOOM_FAILED("bloom::string::operator[]: out of range"); // need throw
+        throw string_exception("bloom::string::operator[] const: out of range");
         /// @endcond
     }
     

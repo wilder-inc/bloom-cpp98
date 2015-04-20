@@ -19,14 +19,10 @@
  *
  */
 
-#pragma once
+#include <bloom++/shared/store.h>
 
-#include <stdlib.h>
-#include <ostream>
-//#include <bloom++/stream/io.h>
-#include <bloom++/_bits/string_t.h>
 
-#ifdef AUX_DEBUG
+#ifdef SHARED_DEBUG
 #define __BLOOM_WITH_DEBUG
 #endif
 #include <bloom++/_bits/debug.h>
@@ -34,20 +30,40 @@
 namespace bloom
 {
 
-/**
- * @brief Like std::string.
- * 
- */
-typedef class string_t<char> string;
+namespace shared
+{
 
-std::ostream& operator<< (std::ostream&o, const bloom::string& str);
-
+#ifdef SHARED_DEBUG
+unsigned int storable::s_count_ = 0;
+#endif
 
 /**
- * @brief Like std::wstring.
- * 
- * In develop...
+ * storable
  */
-typedef class string_t<short> wstring;
+storable::storable(store *container) :
+container_(container)
+{
+#ifdef SHARED_DEBUG
+    s_count_++;
+    DEBUG_INFO("create storable s_count_:"<<s_count_<<" "<<this<<"\n");
+#endif
+}
+
+void storable::remove_from_store()
+{
+    if (container_) {
+        container_->remove(this);
+    }
+}
+
+storable::~storable()
+{
+#ifdef SHARED_DEBUG
+    s_count_--;
+    DEBUG_INFO("destroy storable  s_count_:"<<s_count_<<" "<<this<<"\n");
+#endif
+}
+
+} //namespace shared
 
 } //namespace bloom

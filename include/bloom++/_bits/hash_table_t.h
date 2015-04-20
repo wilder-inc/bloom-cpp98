@@ -50,11 +50,9 @@ public:
     typedef hash_table_t<kT, vT, hashT, rdpT>                           Self;
     typedef kT                                                          key_type;
     typedef vT                                                          value_type;
-    typedef pair<const kT, vT >                                         data_place;
-    typedef rdpT                                                        real_data_place;
+    typedef rdpT                                                        data_place;
     typedef list_t<data_place>                                          base_list;
     typedef list_iterable_t<data_place>                                 iterable;
-    typedef list_iterable_t<real_data_place>                            real_iterable;
     
 private:
     /// @cond
@@ -105,7 +103,7 @@ protected:
         /// @endcond
     }
     
-    real_iterable* erase_iterable(const size_t index, list_iterable_base *obj){
+    iterable* erase_iterable(const size_t index, list_iterable_base *obj){
         /// @cond        
         hash_array_[index].size_--;
         if(!hash_array_[index].size_)

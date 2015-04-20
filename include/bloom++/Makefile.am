@@ -2,6 +2,7 @@
 SUBDIRS = \
 	_bits \
 	stream \
+	shared \
 	net
 
 libbloompp_includedir = $(includedir)/bloom++

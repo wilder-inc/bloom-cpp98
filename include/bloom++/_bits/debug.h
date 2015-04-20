@@ -19,7 +19,6 @@
  *
  */
 
-#include <bloom++/exception.h>
 #include <iostream>
 
 #ifndef BLOOM_LOG_OBJ
@@ -52,9 +51,3 @@
 #endif //__BLOOM_WITH_DEBUG
 
 #define DEBUG_ERROR(STREAM) BLOOM_LOG_OBJ<<__FILE__<<":"<<__LINE__<<" ["<<__FUNCTION__<<"] ERROR: "<<STREAM
-
-#ifdef BLOOM_WITH_EXCEPTIONS
-#define BLOOM_FAILED(MSG) throw bloom::exception(MSG)
-#else
-#define BLOOM_FAILED(MSG) do{ DEBUG_ERROR(MSG); int a = 0; a /= a; }while(0)
-#endif

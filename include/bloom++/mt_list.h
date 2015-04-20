@@ -24,8 +24,19 @@
 #include <bloom++/_bits/mt_list_iterator_t.h>
 #include <bloom++/_bits/mt_store.h>
 #include <bloom++/_bits/list_t.h>
+#include <bloom++/exception.h>
 
 namespace bloom {
+
+/**
+ * MT List exception.
+ */
+class mt_list_exception: public exception
+{
+public:
+    mt_list_exception(string msg):exception(msg){}
+    virtual ~mt_list_exception() throw() {}
+};
 
 /**
  * @brief Multi-thread safe list.
@@ -68,12 +79,14 @@ public:
         /// @endcond
     }
 
-    iterator erase(const iterator &it)
+    iterator erase(const iterator &it) throw()
     {
         /// @cond
         iterator r(this, it.element_->pNext_);
         if(it.element_ != base_list::end_iterable())
             delete base_list::exclude(it.element_);
+        else
+            throw mt_list_exception("mt_list::erase faild!");
         return r;
         /// @endcond
     }
@@ -96,21 +109,25 @@ public:
         /// @endcond
     }
 
-    void pop_front()
+    void pop_front() throw()
     {
         /// @cond
         mutex::scoped_unilock sl(m_);
         if(base_list::end_iterable()->pNext_ != base_list::end_iterable())
             delete base_list::exclude(base_list::end_iterable()->pNext_);
+        else
+            throw list_exception("mt_list::pop_front failed, because container is empty!");
         /// @endcond
     }
 
-    void pop_back()
+    void pop_back() throw()
     {
         /// @cond
         mutex::scoped_unilock sl(m_);
         if(base_list::end_iterable()->pPrev_ != base_list::end_iterable())
             delete base_list::exclude(base_list::end_iterable()->pPrev_);
+        else
+            throw list_exception("mt_list::pop_back failed, because container is empty!");
         /// @endcond
     }
     

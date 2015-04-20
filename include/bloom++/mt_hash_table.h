@@ -24,9 +24,20 @@
 #include <bloom++/_bits/mt_list_iterator_t.h>
 #include <bloom++/_bits/hash_functions.h>
 #include <bloom++/_bits/hash_table_t.h>
+#include <bloom++/exception.h>
 
 namespace bloom
 {
+
+/**
+ * Multi-thread safe hash table exception.
+ */
+class mtht_exception: public exception
+{
+public:
+    mtht_exception(string msg):exception(msg){}
+    virtual ~mtht_exception() throw() {}
+};
 
 /**
  * @brief Multi-thread safe hash table.
@@ -64,12 +75,14 @@ public:
         /// @endcond
     }
 
-    iterator erase(iterator &it){
+    iterator erase(iterator &it) throw(){
         /// @cond
         iterator r(this, it.element_->pNext_);
         if(it.element_ != base_list::end_iterable_)
             delete base_ht::erase_iterable(base_ht::hash_index(static_cast<iterable*>(it.element_)->value_.first), 
                                            it.element_);
+        else
+            throw mtht_exception("mt_hash_table::erase faild!");
         return r;
         /// @endcond
     }

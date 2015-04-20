@@ -21,33 +21,56 @@
 
 #pragma once
 
-#include <stdlib.h>
-#include <ostream>
-//#include <bloom++/stream/io.h>
-#include <bloom++/_bits/string_t.h>
-
-#ifdef AUX_DEBUG
-#define __BLOOM_WITH_DEBUG
-#endif
-#include <bloom++/_bits/debug.h>
+#include <stddef.h>
+#include <bloom++/set.h>
 
 namespace bloom
 {
 
+namespace shared
+{
+
+template<class Tp>
+class ptr;
+
+
+class storable;
 /**
- * @brief Like std::string.
+ * @brief Counter class for shared objects.
  * 
+ * This is a counter of object pointers. Also this
+ * class contain info about all containers which contain
+ * specified object.
  */
-typedef class string_t<char> string;
+class shared_info
+{
+private:
+    /// @cond
+    mutable unsigned int count_;
+    bloom::set<storable *> storables_;
+#ifdef SHARED_DEBUG
+    static unsigned int s_NumObjs_;
+#endif
+    /// @endcond
 
-std::ostream& operator<< (std::ostream&o, const bloom::string& str);
+protected:
+    
+    void insert_storable(storable *data);
+    void erase_storable(storable *data);
+    void remove_from_all_containers();
+    virtual ~shared_info();
 
+public:
+    template<class Tp>
+    friend class ptr;
+    
+    friend class storable;
+    shared_info();
+};
 
-/**
- * @brief Like std::wstring.
- * 
- * In develop...
- */
-typedef class string_t<short> wstring;
+} //namespace shared
 
 } //namespace bloom
+
+
+

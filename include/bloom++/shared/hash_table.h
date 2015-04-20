@@ -21,21 +21,22 @@
 
 #pragma once
 
-#include <utility>
-#include <string.h>
-#include <bloom++/_bits/c++config.h>
+#include <stddef.h>
+#include <bloom++/shared/store.h>
 #include <bloom++/_bits/hash_functions.h>
 #include <bloom++/_bits/hash_table_t.h>
 #include <bloom++/_bits/list_iterator_t.h>
 #include <bloom++/exception.h>
 
-#ifdef AUX_DEBUG
+#ifdef SHARED_DEBUG
 #define __BLOOM_WITH_DEBUG
-#include <bloom++/log.h>
 #endif
 #include <bloom++/_bits/debug.h>
 
 namespace bloom
+{
+
+namespace shared
 {
 
 /**
@@ -48,22 +49,19 @@ public:
     virtual ~ht_exception() throw() {}
 };
 
-using std::pair;
-using std::make_pair;
-
 /**
- * @brief Hash table
+ * @brief Hash table for shared objects.
  */
 template<class kT, class vT, class hashT=hash<kT> >
-class hash_table : public hash_table_t<kT, vT, hashT >
+class hash_table : public store, public hash_table_t<kT, vT, hashT, storable_pair<const kT, vT> >
 {
 public:
     typedef hash_table<kT, vT, hashT>                                   Self;
     typedef kT                                                          key_type;
     typedef vT                                                          value_type;
-    typedef pair<const kT, vT >                                         data_place;
+    typedef storable_pair<const kT, vT >                                data_place;
     typedef list_t<data_place>                                          base_list;
-    typedef hash_table_t<kT, vT, hashT>                                 base_ht;
+    typedef hash_table_t<kT, vT, hashT, data_place>                     base_ht;
     typedef list_iterable_t<data_place>                                 iterable;
     typedef list_iterator_t<data_place>                                 iterator;
     typedef list_iterator_t<data_place, const data_place >              const_iterator;
@@ -75,12 +73,12 @@ public:
     explicit hash_table(size_t hash_size, size_t collisions_limit = 8):
         base_ht(hash_size, collisions_limit){}
 
-    bool insert(const key_type &key, const value_type &value)
+    bool insert(const key_type &key, ptr<value_type> value)
     {
         /// @cond
         const size_t index = base_ht::hash_index(key);
         if (base_ht::find_iterable(index, key) != base_list::end_iterable())return false; //Object with same key has been registered by now
-        iterable *obj = new iterable(data_place(key, value));
+        iterable *obj = new iterable(key, value, this);
         base_ht::insert_iterable(index, obj);
         return true;
         /// @endcond
@@ -110,15 +108,15 @@ public:
         /// @endcond
     }
 
-    value_type &operator[](const key_type &key){
+    ptr<value_type> &operator[](const key_type &key){
         /// @cond
         const size_t index = base_ht::hash_index(key);
         list_iterable_base *i = base_ht::find_iterable(index, key);
         if(i == base_list::end_iterable()){
-            i = new iterable(data_place(key, value_type()));
+            i = new iterable(key, ptr<value_type>(), this);
             base_ht::insert_iterable(index, i);
         }
-        return static_cast<iterable*>(i)->value_;
+        return static_cast<iterable*>(i)->value_.second;
         /// @endcond
     }
 
@@ -177,6 +175,22 @@ public:
     inline void rehash(size_t hash_size) FORCE_INLINE {
         base_ht::rehash();
     }
+    
+    virtual void remove(storable *data) {
+        /// @cond
+        DEBUG_INFO("removing from store...\n");
+        data_place *p = dynamic_cast<data_place *> (data);
+        DEBUG_INFO("key: "<<p->first<<"\n");
+        if (p)this->erase(p->first);
+        else
+        {
+            DEBUG_ERROR("slave_pair is NULL");
+        }
+        DEBUG_INFO("erase done...\n");
+        /// @endcond
+    }
 };
+
+} //namespace shared
 
 } //namespace bloom

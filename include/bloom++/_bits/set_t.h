@@ -47,13 +47,11 @@ public:
     typedef set_t<kvT, hashT, rdpT>                                     Self;
     typedef kvT                                                         key_type;
     typedef kvT                                                         value_type;
-    typedef kvT                                                         data_place;
-    typedef rdpT                                                        real_data_place;
+    typedef rdpT                                                        data_place;
     typedef list_t<data_place>                                          base_list;
     typedef list_iterable_t<data_place>                                 iterable;
-    typedef list_iterable_t<real_data_place>                            real_iterable;
     
-private:
+protected:
     /// @cond
     struct hash_pointer
     {
@@ -102,7 +100,7 @@ protected:
         /// @endcond
     }
     
-    real_iterable* erase_iterable(const size_t index, list_iterable_base *obj){
+    iterable* erase_iterable(const size_t index, list_iterable_base *obj){
         /// @cond
         hash_array_[index].size_--;
         if(!hash_array_[index].size_)
@@ -113,27 +111,7 @@ protected:
         /// @endcond
     }
     
-    void rehash(const size_t &hash_size)
-    {
-        /// @cond
-        hash_size_ = hash_size;
-        delete[] hash_array_;
-        hash_array_ = new hash_pointer[hash_size];
-        if(!base_list::size_)return;
-        list_iterable_base *curr, *next = base_list::end_iterable()->pNext_;
-        base_list::end_iterable()->pNext_ = base_list::end_iterable();
-        base_list::end_iterable()->pPrev_ = base_list::end_iterable();
-        base_list::size_ = 0;
-
-        do
-        {
-            curr = next;
-            next = next->pNext_;
-            insert_iterable(hash_index(static_cast<iterable*>(curr)->value_), curr);
-        }
-        while (next != base_list::end_iterable());
-        /// @endcond
-    }
+    virtual void rehash(const size_t &hash_size) = 0;
     
     void clear()
     {
@@ -176,7 +154,7 @@ public:
         /// @endcond
     }
 
-private:
+protected:
     /// @cond
     hash_pointer *hash_array_;
     size_t hash_size_;

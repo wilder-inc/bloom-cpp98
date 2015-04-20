@@ -23,59 +23,31 @@
 
 #include <typeinfo>
 #include <assert.h>
+#include <bloom++/exception.h>
 
-#ifdef BLOOM_WITH_EXCEPTIONS
-#include <exception>
-#endif
-
-#ifdef BLOOM_ANY_WITH_SHARED
-#include <bloom++/shared/base.h>
-#endif
-
-#ifdef BLOOM_ANY_WITH_DYNAMIC
-#include <bloom++/dynamic/d_object_node.h>
-#endif
 
 #ifdef AUX_DEBUG
 #define __BLOOM_WITH_DEBUG
 #endif
 #include <bloom++/_bits/debug.h>
 
-#include "dynamic/d_object_node.h"
 
 namespace bloom {
 
-#ifdef BLOOM_ANY_WITH_DYNAMIC
-namespace dynamic {
-#elif defined BLOOM_ANY_WITH_SHARED
-namespace shared {
-#endif
-
-#ifdef BLOOM_WITH_EXCEPTIONS
-class bad_any: public std::exception
+/**
+ * Bad any cast exception.
+ */
+class bad_any_cast: public bloom::exception
 {
-protected:
-    const char *message_;
-        
 public:
-    //bad_any(bad_any &e):message_(e.message_){}
-    bad_any(const char *msg):message_(msg){}
-    virtual ~bad_any() throw(){}
-    virtual const char *what() throw(){
-        return message_;
-    }
+    bad_any_cast(string msg):exception(msg){}
+    virtual ~bad_any_cast() throw(){}
 };
-#endif
 
 /**
  * @brief Any type value keeper
  */
 class any
-#ifdef BLOOM_ANY_WITH_DYNAMIC
-: public dynamic::d_object_node
-#elif defined BLOOM_ANY_WITH_SHARED
-: public shared::base
-#endif
 {
 protected:
 
@@ -109,10 +81,7 @@ protected:
         }
     };
 
-#ifndef BLOOM_ANY_WITH_SHARED
 public:
-#endif
-
     any() : content_(0)
     {
     }
@@ -125,24 +94,6 @@ public:
     any(const any &o) : content_(o.content_ ? o.content_->clone() : NULL)
     {
     }
-    
-public:
-    
-#ifdef BLOOM_ANY_WITH_SHARED
-    
-    static any *create(){
-        return new any();
-    }
-    
-    template<class vT>
-    static any *create(const vT &v){
-        return new any(v);
-    }
-    
-    static any *create(const any &o){
-        return new any(o);
-    }
-#endif
 
     ~any()
     {
@@ -183,34 +134,12 @@ public:
     vT &get()
     {
         keeper<vT> *ptr = dynamic_cast<keeper<vT> *>(content_);
-        if(ptr){
-            return ptr->value_;
+        if(!ptr){
+            throw bad_any_cast(fast_ostring("bad cast to \"", 
+                                            typeid(vT).name(), 
+                                            "\"!"));
         }
-        else {
-#ifdef BLOOM_WITH_EXCEPTIONS
-            throw bad_any(
-#ifdef BLOOM_ANY_WITH_SHARED
-                    "bloom::shared::any bad cast"
-#elif defined BLOOM_ANY_WITH_DYNAMIC
-                    "bloom::dynamic::any bad cast"
-#else
-                    "bloom::any bad cast"
-#endif
-                    );
-#else
-            DEBUG_ERROR("any bad cast...\n");
-            assert(0);
-#endif
-        }
-    }
-    /**
-     * @brief Convert to real-type.
-     * Getting object of real-type.
-     * @return 
-     */
-    template<class vT>
-    operator vT(){
-        return get<vT>();
+        return ptr->value_;
     }
     
     template<class vT>
@@ -230,23 +159,7 @@ public:
     {
         any().swap(*this);
     }
-#ifdef BLOOM_ANY_WITH_DYNAMIC
-    /**
-     * @brief Getting shared::ptr pointer of d_value.
-     * @return shared::ptr pointer.
-     */
-    virtual shared::ptr<any> value(){
-        return this;
-    }
-#endif
-};
 
-#ifdef BLOOM_ANY_WITH_DYNAMIC
-} //namespace dynamic
-#undef BLOOM_ANY_WITH_DYNAMIC
-#elif defined BLOOM_ANY_WITH_SHARED
-} //namespace shared
-#undef BLOOM_ANY_WITH_SHARED
-#endif
+};
 
 } //namespace bloom

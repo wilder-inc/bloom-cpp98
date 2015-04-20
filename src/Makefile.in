@@ -130,9 +130,10 @@ am__uninstall_files_from_dir = { \
   }
 am__installdirs = "$(DESTDIR)$(libdir)"
 LTLIBRARIES = $(lib_LTLIBRARIES)
-libbloom___la_DEPENDENCIES = stream/libbloom++-io.la
+libbloom___la_DEPENDENCIES = stream/libbloom++-io.la \
+	shared/libbloom++-sha.la
 am_libbloom___la_OBJECTS = debug.lo hash_functions.lo log.lo string.lo \
-	time.lo condition_variable.lo
+	time.lo condition_variable.lo exception.lo
 libbloom___la_OBJECTS = $(am_libbloom___la_OBJECTS)
 AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
@@ -369,6 +370,7 @@ top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 SUBDIRS = \
 	stream \
+	shared \
 	net
 
 lib_LTLIBRARIES = libbloom++.la
@@ -378,10 +380,12 @@ libbloom___la_SOURCES = \
 	log.cpp \
 	string.cpp \
 	time.cpp \
-	condition_variable.cpp
+	condition_variable.cpp \
+	exception.cpp
 
 libbloom___la_LIBADD = \
-	stream/libbloom++-io.la
+	stream/libbloom++-io.la \
+	shared/libbloom++-sha.la
 
 AM_CPPFLAGS = -I$(top_builddir)/include
 all: all-recursive
@@ -464,6 +468,7 @@ distclean-compile:
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/condition_variable.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/debug.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/exception.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/hash_functions.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/log.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/string.Plo@am__quote@

@@ -76,43 +76,44 @@ communicator::~communicator()
     }
 }
 
-int communicator::bind(const addr_ipv4& ipaddr)
+void communicator::bind(const addr_ipv4& ipaddr) throw()
 {
-    mutex::scoped_lock sl(mutexExecutors_);
+    mutex::scoped_lock slr(sender_->recv_m_);
+    mutex::scoped_lock sls(sender_->send_m_);
+
     if(!socket_->is_closed())
-        return sock_ERROR; //Socket already binded.
+        throw communicator_exception("communicator::bind failed, because socket already binded!");
     
-    if(socket_->bind(ipaddr)){
-        DEBUG_WARN("bind faild\n");
-        return sock_BIND_ERROR;
-    }
+    if(socket_->bind(ipaddr))
+        throw communicator_exception("communicator::bind failed - socket error!");
+            
     cvExecutors_.notify_all();
-    return sock_OK;
 }
 
-int communicator::multicast(const addr_ipv4& group, const addr_ipv4& src_iface)
+void communicator::multicast(const addr_ipv4& group, const addr_ipv4& src_iface) throw()
 {
-    mutex::scoped_lock sl(mutexExecutors_);
-    if(!socket_->is_closed())
-        return sock_ERROR; //Socket already binded.
+    mutex::scoped_lock slr(sender_->recv_m_);
+    mutex::scoped_lock sls(sender_->send_m_);
     
-    if(socket_->multicast(group, src_iface)){
-        DEBUG_WARN("multicast faild\n");
-        return sock_ERROR;
-    }
+    if(!socket_->is_closed())
+        throw communicator_exception("communicator::multicast failed, because socket already binded!");
+    
+    if(socket_->multicast(group, src_iface))
+        throw communicator_exception("communicator::multicast failed - socket error!");
+    
     cvExecutors_.notify_all();
-    return sock_OK;
 }
 
-int communicator::allow_broadcast()
+void communicator::allow_broadcast() throw()
 {
-    mutex::scoped_lock sl(mutexExecutors_);
-    if(!socket_->is_closed()){
-        mutex::scoped_lock sl1(sender_->recv_m_);
-        mutex::scoped_lock sl2(sender_->send_m_);
-        return socket_->allow_broadcast();
-    }
-    return sock_ERROR;
+    mutex::scoped_lock slr(sender_->recv_m_);
+    mutex::scoped_lock sls(sender_->send_m_);
+    
+    if(socket_->is_closed())
+        throw communicator_exception("communicator::allow_broadcast failed, because socket closed!");
+    
+    if(socket_->allow_broadcast())
+        throw communicator_exception("communicator::allow_broadcast failed - socket error!");
 }
 
 sender& communicator::get_sender()
@@ -141,7 +142,7 @@ void communicator::runExecutor()
     {
         {
             mutex::scoped_lock sl(mutexExecutors_);
-            if(sender_->is_closing()){
+            if(sender_->is_closing() || socket_->is_closed()){
                 if(bStopping_){
                     r.reset_connection();
                     s.reset();

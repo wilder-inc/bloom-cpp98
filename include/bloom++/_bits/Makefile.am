@@ -6,6 +6,7 @@ libbloompp_bits_include_HEADERS = \
 	list_t.h \
 	list_iterable_t.h \
 	list_iterator_t.h \
+	shared_set_iterator_t.h \
 	hash_functions.h \
 	hash_table_t.h \
 	debug.h \

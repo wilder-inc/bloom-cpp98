@@ -26,6 +26,7 @@
 #include <string.h>
 #include <bloom++/_bits/c++config.h>
 #include <bloom++/_bits/traits.h>
+#include <bloom++/exception>
 
 #ifdef AUX_DEBUG
 #define __BLOOM_WITH_DEBUG
@@ -36,14 +37,23 @@ namespace bloom
 {
 
 /**
- * @brief The vector class.
+ * Vector exception.
  */
-template<class vT>
-class vector
+class vector_exception: public exception
 {
 public:
-    typedef class vector<vT>                    Self;
-    typedef class traits<vT>                    Traits;
+    vector_exception(string msg):exception(msg){}
+    virtual ~vector_exception() throw() {}
+};
+
+/**
+ * @brief The vector class.
+ */
+template<class vT, class Traits=traits<vT> >
+class vector_t
+{
+public:
+    typedef class vector_t<vT, Traits>          Self;
     
 private: 
     /// @cond
@@ -256,74 +266,57 @@ private:
 
     /// @endcond
     
-public:
-    typedef vT *                                iterator;
-    typedef const vT *                          const_iterator;
+protected:
     
-    vector():
+    vector_t() throw():
     rep_(rep::create(0, 0)){
     }
     
-    vector(size_t size, const vT &v = vT()):
+    vector_t(size_t size, const vT &v = vT()) throw():
     rep_(rep::create_and_construct(size, 0, v)){
     }
     
-    vector(const Self &vec):
+    vector_t(const Self &vec) throw():
     rep_(vec.rep_->getRef()){
     }
     
-    ~vector(){
+    ~vector_t() throw(){
         /// @cond
         rep_->releaseRef();
         /// @endcond
     }
     
-    Self &operator=(const Self &vec){
+    void assign(const Self &vec){
         /// @cond
         rep_->releaseRef();
         rep_ = vec.rep_->getRef();
-        return *this;
         /// @endcond
     }
-    
-    Self& append(const vT &c){
-        push_back(c);
-        return *this;
-    }
 
-    Self& append(const vT *vec, size_t size) {
+    void append(const vT *vec, size_t size) {
         /// @cond
         if(!size)return *this;
         //const size_t old_size = rep_->size_;
         append_prepare(size);
         Traits::copy_construct(rep_->data() + rep_->size_ - size, vec, size);
-        return *this;
         /// @endcond
     }
     
-    Self& append(const Self &vec){
+    void append(const Self &vec){
+        /// @cond
         if(!vec.rep_->size_)return *this;
         const size_t old_size = rep_->size_;
         const size_t size = vec.rep_->size_;
         append_prepare(vec.rep_->size_);
         Traits::copy_construct(rep_->data() + old_size, vec.rep_->data(), size);
-        return *this;
-    }
-    
-    void insert(size_t index, const vT &c){
-        insert(index, &c, 1);
-    }
-    
-    iterator insert(iterator it, const vT &c){
-        insert(it - begin(), &c, 1);
-        return ++it;
+        /// @endcond
     }
     
     void insert(size_t index, const vT *values, size_t size) {
         /// @cond
         if(!size)return;
         if(index > rep_->size_)
-            BLOOM_FAILED("vector::insert: index > rep_->size_"); //throw
+            throw vector_exception("vector_t::insert: index > rep_->size_"); //throw
         if(insert_prepare(index, size))
             Traits::copy_construct(rep_->data() + index, values, size);
         else
@@ -331,15 +324,11 @@ public:
         /// @endcond
     }
     
-    iterator insert(iterator it, const vT *values, size_t size){
-        insert(it - begin(), values, size);
-        return it+=size;
-    }
-    
-    void insert(size_t index, const Self &vec){
+    void insert(size_t index, const Self &vec) {
+        /// @cond
         if(!vec.rep_->size_)return *this;
         if(index > rep_->size_)
-            BLOOM_FAILED("vector::insert: index > rep_->size_"); //throw
+            throw vector_exception("vector_t::insert: index > rep_->size_"); //throw
         if(&vec == this){
             const size_t size = vec.rep_->size_;
             if(insert_prepare(index, vec.rep_->size_)){
@@ -357,18 +346,14 @@ public:
             else
                 Traits::copy(rep_->data() + index, vec.rep_->data(), vec.rep_->size_);
         }
-    }
-    
-    iterator insert(iterator it, const Self &vec){
-        insert(it - begin(), vec);
-        return it+=vec.rep_->size_;
+        /// @endcond
     }
 
     void replace(size_t index, const vT *values, size_t size) {
         /// @cond
         if(!size)return *this;
         if(index+size > rep_->size_)
-            BLOOM_FAILED("vector::replace: index + size > rep_->size_"); // throw
+            throw vector_exception("vector_t::replace: index + size > rep_->size_"); // throw
         if(rep_->refcount_){
             rep_ = rep_->clone_for_replace(index, size);
             Traits::copy_construct(rep_->data() + index, values, size);
@@ -378,29 +363,21 @@ public:
         /// @endcond
     }
     
-    iterator replace(iterator it, const vT *values, size_t size) {
-        replace(it - begin(), values, size);
-        return it+=size;
-    }
-    
-    void replace(size_t index, const Self &vec){
+    void replace(size_t index, const Self &vec) {
+        /// @cond
         if(&vec == this){
             if(index)
-                BLOOM_FAILED("vector::replace: trying to replace self by self with offset"); // throw
+                throw vector_exception("vector_t::replace: trying to replace self by self with offset"); // throw
             return *this;
         }
-        return replace(index, vec.rep_->data(), vec.rep_->size_);
-    }
-    
-    iterator replace(iterator it, const Self &vec){
-        replace(it - begin(), vec);
-        return it+=vec.rep_->size_;
+        replace(index, vec.rep_->data(), vec.rep_->size_);
+        /// @endcond
     }
     
     void assign(size_t index, size_t size, const vT &c) {
         /// @cond
         if(index+size > rep_->size_)
-            BLOOM_FAILED("vector::assing: index + size > rep_->size_"); // throw
+            throw vector_exception("vector_t::assing: index + size > rep_->size_"); // throw
         if(rep_->refcount_){
             rep_ = rep_->clone_for_replace(index, size);
             Traits::construct(rep_->data() + index, size, c);
@@ -410,16 +387,11 @@ public:
         /// @endcond
     }
     
-    iterator assign(iterator it, size_t size, const vT &c) {
-        assign(it - begin(), size, c);
-        return it+=size;
-    }
-    
     void erase(size_t index, size_t size = 1) {
         /// @cond
         if(!size)return;
         if(index+size > rep_->size_)
-            BLOOM_FAILED("vector::erase: index + size > rep_->size_"); // throw
+            throw vector_exception("vector_t::erase: index + size > rep_->size_"); // throw
         
         const size_t new_size = rep_->size_ - size;
         
@@ -447,32 +419,7 @@ public:
         /// @cond
         if(index < rep_->size_)
             return rep_->data()[index];
-        BLOOM_FAILED("vector::operator[]: index > rep_->size_"); // need throw
-        /// @endcond
-    }
-    
-    Self &operator+=(const Self &vec){
-        return append(vec);
-    }
-    
-    Self operator+(const Self &vec){
-        /// @cond
-        Self v(*this);
-        v.append(vec);
-        return v;
-        /// @endcond
-    }
-    
-    Self &operator+=(const vT &elem){
-        push_back(elem);
-        return *this;
-    }
-    
-    Self operator+(const vT &elem){
-        /// @cond
-        Self v(*this);
-        v.push_back(elem);
-        return v;
+        throw vector_exception("vector_t::operator[]: index > rep_->size_"); // need throw
         /// @endcond
     }
     
@@ -486,9 +433,9 @@ public:
         Traits::copy_construct(rep_->data() + rep_->size_ - 1, &c, 1);
     }
     
-    void pop_back(){
+    void pop_back() {
         if(!rep_->size_)
-            BLOOM_FAILED("vector::pop_back: vector is empty"); // need throw
+            throw vector_exception("vector_t::pop_back: vector is empty"); // need throw
         const size_t size = rep_->size_ - 1;
         if(rep_->refcount_ || size < rep_->capacity_ / 2 || size > rep_->capacity_){
             rep_ = rep_->clone_and_pop_back(size);
@@ -555,31 +502,31 @@ public:
         /// @endcond
     }
     
-    iterator begin(){
+    vT* begin(){
         /// @cond
         if(rep_->refcount_)
             rep_ = rep_->clone();
-        return iterator(rep_->data());
+        return rep_->data();
         /// @endcond
     }
     
-    const_iterator begin() const{
+    vT* const begin() const{
         /// @cond
-        return const_iterator(rep_->data());
+        return rep_->data();
         /// @endcond
     }
     
-    iterator end(){
+    vT* end(){
         /// @cond
         if(rep_->refcount_)
             rep_ = rep_->clone();
-        return iterator(rep_->data() + rep_->size_);
+        return rep_->data() + rep_->size_;
         /// @endcond
     }
     
-    const_iterator end() const{
+    vT* const end() const{
         /// @cond
-        return const_iterator(rep_->data() + rep_->size_);
+        return rep_->data() + rep_->size_;
         /// @endcond
     }
 };

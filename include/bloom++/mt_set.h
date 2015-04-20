@@ -26,9 +26,20 @@
 #include <bloom++/_bits/set_t.h>
 #include <bloom++/_bits/mt_list_iterator_t.h>
 #include <bloom++/mutex.h>
+#include <bloom++/exception.h>
 
 namespace bloom
 {
+
+/**
+ * MT Set exception.
+ */
+class mt_set_exception: public exception
+{
+public:
+    mt_set_exception(string msg):exception(msg){}
+    virtual ~mt_set_exception() throw() {}
+};
 
 /**
  * @brief Multi-thread safe set.
@@ -66,12 +77,14 @@ public:
         /// @endcond
     }
 
-    iterator erase(iterator &it){
+    iterator erase(iterator &it) throw() {
         /// @cond
         iterator r(this, it.element_->pNext_);
         if(it.element_ != base_list::end_iterable())
             delete base_set::erase_iterable(hash_index(static_cast<iterable*>(it.element_)->value_.first), 
                                            it.element_);
+        else
+            throw set_exception("mt_set::erase faild!");
         return r;
         /// @endcond
     }
