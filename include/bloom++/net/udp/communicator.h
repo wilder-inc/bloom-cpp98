@@ -48,45 +48,66 @@ public:
 };
 
 /**
+ * UDP Socket exception.
+ */
+/*
+class bad_communicator_bind: public communicator_exception
+{
+public:
+    bad_communicator_bind(string msg="failed!"):communicator_exception(string("communicator::bind: ")+msg){}
+    virtual ~bad_communicator_bind() throw() {}
+};
+ */
+
+/**
  * @brief UDP communicator.
  * This is a socket with a threads pool which emits executor signal if 
  * there is incoming datagram. Next thread will emit executor signal
  * after the current thread will free threads pool (after read_and_free or
  * free methods invoked of receiver class).
  * 
- * @param numExecutors number of executors threads.
- * @param select_timeout_sec Select timeout sec.
- * @param select_timeout_usec Select timeout usec.
  */
 class communicator
 {
 public:
 
-    communicator(int numExecutors, 
-                 size_t select_timeout_sec, 
+    /**
+     * Constructor.
+     * @param select_timeout_ms Select timeout in milliseconds.
+     */
+    communicator(size_t select_timeout_ms);
+    
+    /**
+     * Constructor.
+     * Select timeout consist of seconds and nanoseconds.
+     * @param select_timeout_sec Select timeout in seconds.
+     * @param select_timeout_usec Select timeout in nanoseconds.
+     */
+    communicator(size_t select_timeout_sec, 
                  size_t select_timeout_usec);
     ~communicator();
     
     signal2<bool, receiver &, sender & > &executor();
     
-    void bind(const addr_ipv4& ipaddr) throw();
+    void add_threads(unsigned int num);
+    unsigned int num_threads();
+    
+    void bind(const addr_ipv4& ipaddr) ;
 #ifdef LINUX
-    void multicast(const addr_ipv4 &group, const addr_ipv4 &src_iface) throw();
+    void multicast(const addr_ipv4 &group, const addr_ipv4 &src_iface) ;
 #endif
-    void allow_broadcast() throw();
+    void allow_broadcast() ;
     
     sender& get_sender();
     
 protected:
     /// @cond
-    int numExecutors_;
     size_t select_timeout_sec_;
     size_t select_timeout_usec_;
     bool bBlocking_;
     bool bStopping_;
     
     mutex mutexExecutors_;
-    condition_variable cvExecutors_;
 
     list<shared_ptr<thread<communicator> > > executors_;
 

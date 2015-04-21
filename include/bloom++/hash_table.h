@@ -48,6 +48,16 @@ public:
     virtual ~ht_exception() throw() {}
 };
 
+/**
+ * Hash table exception.
+ */
+class bad_ht_erase: public ht_exception
+{
+public:
+    bad_ht_erase(string msg):ht_exception(string("hash_table::erase: ")+msg){}
+    virtual ~bad_ht_erase() throw() {}
+};
+
 using std::pair;
 using std::make_pair;
 
@@ -86,14 +96,14 @@ public:
         /// @endcond
     }
 
-    iterator erase(iterator &it) throw() {
+    iterator erase(iterator &it) {
         /// @cond
         iterator r(it.element_->pNext_);
         if(it.element_ != base_list::end_iterable_)
             delete base_ht::erase_iterable(hash_index(static_cast<iterable*>(it.element_)->value_.first), 
                                            it.element_);
         else
-            throw ht_exception("hash_table::erase faild!");
+            throw bad_ht_erase("can't erase end element!");
         return r;
         /// @endcond
     }

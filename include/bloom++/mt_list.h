@@ -39,6 +39,36 @@ public:
 };
 
 /**
+ * MT List exception.
+ */
+class bad_mt_list_erase: public mt_list_exception
+{
+public:
+    bad_mt_list_erase(string msg):mt_list_exception(string("ht_list::erase: ")+msg){}
+    virtual ~bad_mt_list_erase() throw() {}
+};
+
+/**
+ * MT List exception.
+ */
+class bad_mt_list_pop_front: public mt_list_exception
+{
+public:
+    bad_mt_list_pop_front(string msg):mt_list_exception(string("ht_list::pop_front: ")+msg){}
+    virtual ~bad_mt_list_pop_front() throw() {}
+};
+
+/**
+ * MT List exception.
+ */
+class bad_mt_list_pop_back: public mt_list_exception
+{
+public:
+    bad_mt_list_pop_back(string msg):mt_list_exception(string("ht_list::pop_back: ")+msg){}
+    virtual ~bad_mt_list_pop_back() throw() {}
+};
+
+/**
  * @brief Multi-thread safe list.
  */
 template<class vT>
@@ -86,7 +116,7 @@ public:
         if(it.element_ != base_list::end_iterable())
             delete base_list::exclude(it.element_);
         else
-            throw mt_list_exception("mt_list::erase faild!");
+            throw bad_mt_list_erase("can't erase end element!");
         return r;
         /// @endcond
     }
@@ -109,25 +139,25 @@ public:
         /// @endcond
     }
 
-    void pop_front() throw()
+    void pop_front()
     {
         /// @cond
         mutex::scoped_unilock sl(m_);
         if(base_list::end_iterable()->pNext_ != base_list::end_iterable())
             delete base_list::exclude(base_list::end_iterable()->pNext_);
         else
-            throw list_exception("mt_list::pop_front failed, because container is empty!");
+            throw bad_mt_list_pop_front("container is empty!");
         /// @endcond
     }
 
-    void pop_back() throw()
+    void pop_back()
     {
         /// @cond
         mutex::scoped_unilock sl(m_);
         if(base_list::end_iterable()->pPrev_ != base_list::end_iterable())
             delete base_list::exclude(base_list::end_iterable()->pPrev_);
         else
-            throw list_exception("mt_list::pop_back failed, because container is empty!");
+            throw bad_mt_list_pop_back("container is empty!");
         /// @endcond
     }
     

@@ -69,7 +69,7 @@ void swapbytes(void *object, size_t size)
    }
 }
 
-long get_milli_sec() throw()
+long get_milli_sec()
 {
     struct timeval tv;
     long ret;

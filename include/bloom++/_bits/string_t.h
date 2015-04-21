@@ -362,7 +362,7 @@ public:
         /// @endcond
     }
     
-    Self& insert(size_t index, const vT *values, size_t size) throw(){
+    Self& insert(size_t index, const vT *values, size_t size){
         /// @cond
         if(!size)return *this;
         if(index > rep_->size_)
@@ -373,7 +373,7 @@ public:
         /// @endcond
     }
     
-    Self& insert(size_t index, const Self &str) throw(){
+    Self& insert(size_t index, const Self &str){
         if(!str.rep_->size_)return *this;
         if(index > rep_->size_)
             throw string_exception("bloom::string::insert: index out of range");
@@ -390,7 +390,7 @@ public:
         return *this;
     }
 
-    Self& replace(size_t index, const vT *values, size_t size) throw() {
+    Self& replace(size_t index, const vT *values, size_t size) {
         /// @cond
         if(!size)return *this;
         if(index+size > rep_->size_)
@@ -402,7 +402,7 @@ public:
         /// @endcond
     }
     
-    Self& replace(size_t index, const Self &str) throw(){
+    Self& replace(size_t index, const Self &str) {
         if(&str == this){
             if(index)
                 throw string_exception("bloom::string::replace: trying to replace self by self with offset");
@@ -411,7 +411,7 @@ public:
         return replace(index, str.rep_->data_, str.rep_->size_);
     }
     
-    Self& replace(size_t index, size_t size, vT c) throw(){
+    Self& replace(size_t index, size_t size, vT c) {
         /// @cond
         if(index+size > rep_->size_)
             throw string_exception("bloom::string::replace: out of range");
@@ -422,7 +422,7 @@ public:
         /// @endcond
     }
     
-    Self& erase(size_t index, size_t size = 1) throw(){
+    Self& erase(size_t index, size_t size = 1) {
         /// @cond
         if(!size)return *this;
         if(index+size > rep_->size_)

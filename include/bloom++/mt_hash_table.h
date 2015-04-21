@@ -40,6 +40,16 @@ public:
 };
 
 /**
+ * Multi-thread safe hash table exception.
+ */
+class bad_mtht_erase: public mtht_exception
+{
+public:
+    bad_mtht_erase(string msg):mtht_exception(string("mt_hash_table::erase: ")+msg){}
+    virtual ~bad_mtht_erase() throw() {}
+};
+
+/**
  * @brief Multi-thread safe hash table.
  */
 template<class kT, class vT, class hashT=hash<kT> >
@@ -75,14 +85,14 @@ public:
         /// @endcond
     }
 
-    iterator erase(iterator &it) throw(){
+    iterator erase(iterator &it){
         /// @cond
         iterator r(this, it.element_->pNext_);
         if(it.element_ != base_list::end_iterable_)
             delete base_ht::erase_iterable(base_ht::hash_index(static_cast<iterable*>(it.element_)->value_.first), 
                                            it.element_);
         else
-            throw mtht_exception("mt_hash_table::erase faild!");
+            throw bad_mtht_erase("can't erase end element!");
         return r;
         /// @endcond
     }

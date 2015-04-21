@@ -57,7 +57,17 @@ class set_exception: public exception
 {
 public:
     set_exception(string msg):exception(msg){}
-    virtual ~set_exception() throw() {}
+    virtual ~set_exception()  {}
+};
+
+/**
+ * Hash table exception.
+ */
+class bad_set_erase: public ht_exception
+{
+public:
+    bad_set_erase(string msg):ht_exception(string("shared::set::erase: ")+msg){}
+    virtual ~bad_ht_erase() throw() {}
 };
 
 /**
@@ -95,14 +105,14 @@ public:
         /// @endcond
     }
 
-    iterator erase(iterator &it) throw() {
+    iterator erase(iterator &it)  {
         /// @cond
         iterator r(it.element_->pNext_);
         if(it.element_ != base_list::end_iterable_)
             delete base_set::erase_iterable(hash_index(static_cast<iterable*>(it.element_)->value_), 
                                            it.element_);
         else
-            throw set_exception("shared::set::erase faild!");
+            throw bad_set_erase("can't erase end element!");
         return r;
         /// @endcond
     }

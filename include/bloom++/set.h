@@ -50,6 +50,16 @@ public:
 };
 
 /**
+ * Set exception.
+ */
+class bad_set_erase: public set_exception
+{
+public:
+    bad_set_erase(string msg):set_exception(string("set::erase: ")+msg){}
+    virtual ~bad_set_erase() throw() {}
+};
+
+/**
  * @brief Set
  */
 template<class kvT, class hashT=hash<kvT> >
@@ -84,14 +94,14 @@ public:
         /// @endcond
     }
 
-    iterator erase(iterator &it) throw() {
+    iterator erase(iterator &it) {
         /// @cond
         iterator r(it.element_->pNext_);
         if(it.element_ != base_list::end_iterable())
             delete base_set::erase_iterable(hash_index(static_cast<iterable*>(it.element_)->value_), 
                                            it.element_);
         else
-            throw set_exception("set::erase faild!");
+            throw bad_set_erase("can't erase end element!");
         return r;
         /// @endcond
     }

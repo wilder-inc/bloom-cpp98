@@ -31,7 +31,7 @@ namespace net
 namespace udp
 {
 
-sender::sender(shared_ptr<socket> sock): socket_(sock)
+sender::sender(shared_ptr<socket> sock): socket_(sock), bClosing_(false)
 {
 }
 

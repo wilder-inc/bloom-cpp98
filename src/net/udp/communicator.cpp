@@ -40,10 +40,18 @@ namespace net
 namespace udp
 {
 
-communicator::communicator(int numExecutors,
-                           size_t select_timeout_sec, 
+communicator::communicator(size_t select_timeout_ms) :
+select_timeout_sec_(select_timeout_ms / 1000),
+select_timeout_usec_((select_timeout_ms % 1000) * 1000),
+bBlocking_(select_timeout_ms == 0 ? true : false),
+bStopping_(false),
+socket_(new socket),
+sender_(new sender(socket_))
+{
+}
+
+communicator::communicator(size_t select_timeout_sec, 
                            size_t select_timeout_usec) :
-numExecutors_(numExecutors),
 select_timeout_sec_(select_timeout_sec),
 select_timeout_usec_(select_timeout_usec),
 bBlocking_((select_timeout_sec==select_timeout_usec&&
@@ -52,21 +60,12 @@ bStopping_(false),
 socket_(new socket),
 sender_(new sender(socket_))
 {
-    for (int i = 0; i < numExecutors_; ++i)
-    {
-        shared_ptr<thread<communicator> > thr (new thread<communicator>(&communicator::runExecutor, this));
-        executors_.push_back(thr);
-        thr->start();
-    }
 }
 
 communicator::~communicator()
 {
     bStopping_ = true;
-    {
-        mutex::scoped_lock sl(mutexExecutors_);
-        cvExecutors_.notify_all();
-    }
+    
     ::bloom::list<shared_ptr<thread<communicator> > >::iterator it;
     ::bloom::list<shared_ptr<thread<communicator> > >::iterator end_it = executors_.end();
 
@@ -76,44 +75,43 @@ communicator::~communicator()
     }
 }
 
-void communicator::bind(const addr_ipv4& ipaddr) throw()
+void communicator::add_threads(unsigned int num)
 {
-    mutex::scoped_lock slr(sender_->recv_m_);
-    mutex::scoped_lock sls(sender_->send_m_);
-
-    if(!socket_->is_closed())
-        throw communicator_exception("communicator::bind failed, because socket already binded!");
-    
-    if(socket_->bind(ipaddr))
-        throw communicator_exception("communicator::bind failed - socket error!");
-            
-    cvExecutors_.notify_all();
+    for (int i = 0; i < num; ++i)
+    {
+        shared_ptr<thread<communicator> > thr (new thread<communicator>(&communicator::runExecutor, this));
+        executors_.push_back(thr);
+        thr->start();
+    }
 }
 
-void communicator::multicast(const addr_ipv4& group, const addr_ipv4& src_iface) throw()
+unsigned int communicator::num_threads()
 {
-    mutex::scoped_lock slr(sender_->recv_m_);
-    mutex::scoped_lock sls(sender_->send_m_);
-    
-    if(!socket_->is_closed())
-        throw communicator_exception("communicator::multicast failed, because socket already binded!");
-    
-    if(socket_->multicast(group, src_iface))
-        throw communicator_exception("communicator::multicast failed - socket error!");
-    
-    cvExecutors_.notify_all();
+    return (unsigned int)executors_.size();
 }
 
-void communicator::allow_broadcast() throw()
+void communicator::bind(const addr_ipv4& ipaddr)
 {
     mutex::scoped_lock slr(sender_->recv_m_);
     mutex::scoped_lock sls(sender_->send_m_);
     
-    if(socket_->is_closed())
-        throw communicator_exception("communicator::allow_broadcast failed, because socket closed!");
+    socket_->bind(ipaddr);
+}
+
+void communicator::multicast(const addr_ipv4& group, const addr_ipv4& src_iface)
+{
+    mutex::scoped_lock slr(sender_->recv_m_);
+    mutex::scoped_lock sls(sender_->send_m_);
     
-    if(socket_->allow_broadcast())
-        throw communicator_exception("communicator::allow_broadcast failed - socket error!");
+    socket_->multicast(group, src_iface);
+}
+
+void communicator::allow_broadcast()
+{
+    mutex::scoped_lock slr(sender_->recv_m_);
+    mutex::scoped_lock sls(sender_->send_m_);
+    
+    socket_->allow_broadcast();
 }
 
 sender& communicator::get_sender()
@@ -137,40 +135,34 @@ void communicator::runExecutor()
         r.set_connection(sender_);
         s = sender_;
     }
-    
+        
     while (!bStopping_)
     {
         {
             mutex::scoped_lock sl(mutexExecutors_);
-            if(sender_->is_closing() || socket_->is_closed()){
+            if(sender_->is_closing()){
                 if(bStopping_){
                     r.reset_connection();
                     s.reset();
                     break;
                 }
-                cvExecutors_.wait(mutexExecutors_);
-                if(bStopping_ && sender_->is_closing()){
-                    r.reset_connection();
-                    s.reset();
-                    break;
-                }
-                else {
-                    s = sender_;
-                    r.set_connection(s);
-                }
             }
         }
         
         mutex::unique_lock ul(s->recv_m_);
-        
+
         if(bStopping_)s->close();
         if(s->is_closing())continue;
 
         if(!bBlocking_){
-            if(s->socket_->select(select_timeout_sec_, 
+            int ret = s->socket_->select(select_timeout_sec_, 
                        select_timeout_usec_, 
-                       select_Read) != sock_SELECT_READY)
+                       select_Read);
+            if(ret != sock_SELECT_READY){
+                if(ret == sock_SELECT_ERROR)
+                    DEBUG_INFO("select return ERROR!\n");
                 continue;
+            }
         }
         
         r.set_locker(ul);

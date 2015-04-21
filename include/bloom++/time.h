@@ -31,7 +31,7 @@ std::tm           strToTime(const string &stime, const string &format);
 //std::tm           dtToTm(CWDateTime dt);
 
 void              swapbytes(void *object, size_t size);
-long              get_milli_sec() throw();
+long              get_milli_sec();
 
 template<class T>
 T                 swapValue(T &value)

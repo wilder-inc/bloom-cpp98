@@ -26,7 +26,7 @@
 #include <string.h>
 #include <bloom++/_bits/c++config.h>
 #include <bloom++/_bits/traits.h>
-#include <bloom++/exception>
+#include <bloom++/exception.h>
 
 #ifdef AUX_DEBUG
 #define __BLOOM_WITH_DEBUG
@@ -44,6 +44,66 @@ class vector_exception: public exception
 public:
     vector_exception(string msg):exception(msg){}
     virtual ~vector_exception() throw() {}
+};
+
+/**
+ * Vector exception.
+ */
+class bad_vector_insert: public vector_exception
+{
+public:
+    bad_vector_insert(string msg):vector_exception(string("bad_vector_insert: ")+msg){}
+    virtual ~bad_vector_insert() throw() {}
+};
+
+/**
+ * Vector exception.
+ */
+class bad_vector_replace: public vector_exception
+{
+public:
+    bad_vector_replace(string msg):vector_exception(string("bad_vector_replace: ")+msg){}
+    virtual ~bad_vector_replace() throw() {}
+};
+
+/**
+ * Vector exception.
+ */
+class bad_vector_assign: public vector_exception
+{
+public:
+    bad_vector_assign(string msg):vector_exception(string("bad_vector_assign: ")+msg){}
+    virtual ~bad_vector_assign() throw() {}
+};
+
+/**
+ * Vector exception.
+ */
+class bad_vector_erase: public vector_exception
+{
+public:
+    bad_vector_erase(string msg):vector_exception(string("bad_vector_erase: ")+msg){}
+    virtual ~bad_vector_erase() throw() {}
+};
+
+/**
+ * Vector exception.
+ */
+class bad_vector_index: public vector_exception
+{
+public:
+    bad_vector_index(string msg):vector_exception(string("bad_vector_index: ")+msg){}
+    virtual ~bad_vector_index() throw() {}
+};
+
+/**
+ * Vector exception.
+ */
+class bad_vector_pop_back: public vector_exception
+{
+public:
+    bad_vector_pop_back(string msg):vector_exception(string("bad_vector_pop_back: ")+msg){}
+    virtual ~bad_vector_pop_back() throw() {}
 };
 
 /**
@@ -295,7 +355,7 @@ protected:
 
     void append(const vT *vec, size_t size) {
         /// @cond
-        if(!size)return *this;
+        if(!size)return;
         //const size_t old_size = rep_->size_;
         append_prepare(size);
         Traits::copy_construct(rep_->data() + rep_->size_ - size, vec, size);
@@ -304,7 +364,7 @@ protected:
     
     void append(const Self &vec){
         /// @cond
-        if(!vec.rep_->size_)return *this;
+        if(!vec.rep_->size_)return;
         const size_t old_size = rep_->size_;
         const size_t size = vec.rep_->size_;
         append_prepare(vec.rep_->size_);
@@ -316,7 +376,7 @@ protected:
         /// @cond
         if(!size)return;
         if(index > rep_->size_)
-            throw vector_exception("vector_t::insert: index > rep_->size_"); //throw
+            throw bad_vector_insert("index > rep_->size_"); //throw
         if(insert_prepare(index, size))
             Traits::copy_construct(rep_->data() + index, values, size);
         else
@@ -326,9 +386,9 @@ protected:
     
     void insert(size_t index, const Self &vec) {
         /// @cond
-        if(!vec.rep_->size_)return *this;
+        if(!vec.rep_->size_)return;
         if(index > rep_->size_)
-            throw vector_exception("vector_t::insert: index > rep_->size_"); //throw
+            throw bad_vector_insert("index > rep_->size_"); //throw
         if(&vec == this){
             const size_t size = vec.rep_->size_;
             if(insert_prepare(index, vec.rep_->size_)){
@@ -351,9 +411,9 @@ protected:
 
     void replace(size_t index, const vT *values, size_t size) {
         /// @cond
-        if(!size)return *this;
+        if(!size)return;
         if(index+size > rep_->size_)
-            throw vector_exception("vector_t::replace: index + size > rep_->size_"); // throw
+            throw bad_vector_replace("index + size > rep_->size_"); // throw
         if(rep_->refcount_){
             rep_ = rep_->clone_for_replace(index, size);
             Traits::copy_construct(rep_->data() + index, values, size);
@@ -367,7 +427,7 @@ protected:
         /// @cond
         if(&vec == this){
             if(index)
-                throw vector_exception("vector_t::replace: trying to replace self by self with offset"); // throw
+                throw bad_vector_replace("trying to replace self by self with offset"); // throw
             return *this;
         }
         replace(index, vec.rep_->data(), vec.rep_->size_);
@@ -377,7 +437,7 @@ protected:
     void assign(size_t index, size_t size, const vT &c) {
         /// @cond
         if(index+size > rep_->size_)
-            throw vector_exception("vector_t::assing: index + size > rep_->size_"); // throw
+            throw bad_vector_assign("index + size > rep_->size_"); // throw
         if(rep_->refcount_){
             rep_ = rep_->clone_for_replace(index, size);
             Traits::construct(rep_->data() + index, size, c);
@@ -391,7 +451,7 @@ protected:
         /// @cond
         if(!size)return;
         if(index+size > rep_->size_)
-            throw vector_exception("vector_t::erase: index + size > rep_->size_"); // throw
+            throw bad_vector_erase("index + size > rep_->size_"); // throw
         
         const size_t new_size = rep_->size_ - size;
         
@@ -419,7 +479,7 @@ protected:
         /// @cond
         if(index < rep_->size_)
             return rep_->data()[index];
-        throw vector_exception("vector_t::operator[]: index > rep_->size_"); // need throw
+        throw bad_vector_index("operator[] const: index > rep_->size_"); // need throw
         /// @endcond
     }
     
@@ -435,7 +495,7 @@ protected:
     
     void pop_back() {
         if(!rep_->size_)
-            throw vector_exception("vector_t::pop_back: vector is empty"); // need throw
+            throw bad_vector_pop_back("vector is empty"); // need throw
         const size_t size = rep_->size_ - 1;
         if(rep_->refcount_ || size < rep_->capacity_ / 2 || size > rep_->capacity_){
             rep_ = rep_->clone_and_pop_back(size);
@@ -531,7 +591,7 @@ protected:
     }
 };
 
-template<class vT>
-class vector<vT>::rep_base vector<vT>::rep::rep_empty_ = {0, 0, 1};
+template<class vT, class Traits>
+class vector_t<vT, Traits>::rep_base vector_t<vT, Traits>::rep::rep_empty_ = {0, 0, 1};
 
 } //namespace bloom

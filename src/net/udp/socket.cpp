@@ -62,72 +62,50 @@ namespace net
 namespace udp
 {
 
-int socket::bind(const addr_ipv4& addr)
+socket::socket():socket_base()
 {
-    socket_base::close();
-    sd_ = ::socket(AF_INET, SOCK_DGRAM, 0/*ipproto*/);
-    if (sd_ == -1)
-    {
-        DEBUG_WARN("socket - could not create a socket\n");
-        return sock_ERROR;
+    sd_ = ::socket(AF_INET, SOCK_DGRAM, 0);
+    if (sd_ == -1){
+        throw bad_socket_init();
     }
-    
-    return socket_base::bind__(addr);
+}
+
+void socket::bind(const addr_ipv4& addr)
+{
+    if(socket_base::bind__(addr))
+        throw bad_socket_bind();
 }
 
 #ifdef LINUX
-int socket::multicast(const addr_ipv4 &group, const addr_ipv4 &src_iface)
+void socket::multicast(const addr_ipv4 &group, const addr_ipv4 &src_iface)
 {
     struct ip_mreq mreq;
     u_int yes = 1;
     
-    socket_base::close();
-    sd_ = ::socket(AF_INET, SOCK_DGRAM, 0/*ipproto*/);
-    if (sd_ == -1)
-    {
-        DEBUG_WARN("socket - could not create a socket\n");
-        return sock_ERROR;
-    }
-    
-    if (setsockopt(sd_, SOL_SOCKET, SO_REUSEADDR, CSTPCSTR & yes, sizeof (yes)) < 0)
-    {
-        DEBUG_ERROR("Reusing ADDR failed\n");
-        return sock_ERROR;
-    }
+    if (setsockopt(sd_, SOL_SOCKET, SO_REUSEADDR, CSTPCSTR & yes, sizeof (yes)))
+        throw bad_socket_multicast("set SO_REUSEADDR failed!");
 
-    if (bind__(src_iface))
-        return sock_BIND_ERROR;
+    bind(src_iface);
 
     mreq.imr_multiaddr.s_addr = htonl(group.ip_int());
     mreq.imr_interface.s_addr = htonl(src_iface.ip_int());
 
-    if (setsockopt(sd_, IPPROTO_IP, IP_ADD_MEMBERSHIP, CSTPCSTR & mreq, sizeof (mreq)) < 0)
-    {
-        DEBUG_WARN("setsockopt IP_ADD_MEMBERSHIP\n");
-        return sock_ERROR;
-    }
-    return sock_OK;
+    if (setsockopt(sd_, IPPROTO_IP, IP_ADD_MEMBERSHIP, CSTPCSTR & mreq, sizeof (mreq)))
+        throw bad_socket_multicast("set IP_ADD_MEMBERSHIP failed!");
 }
 #endif
 
-int socket::allow_broadcast()
+void socket::allow_broadcast()
 {
     int op_val = 1;
 
 #ifdef LINUX
-    if (setsockopt(sd_, SOL_SOCKET, SO_BROADCAST, (void*) &op_val, sizeof (op_val)) < 0)
-    {
-        DEBUG_WARN("setsockopt: SO_BROADCAST failed\n");
-        return sock_ERROR;
-    }
+    if (setsockopt(sd_, SOL_SOCKET, SO_BROADCAST, (void*) &op_val, sizeof (op_val)))
+        throw bad_socket_broadcast("set SO_BROADCAST failed!");
 #else
-    if (setsockopt(sd_, SOL_SOCKET, SO_BROADCAST, CSTPCSTR & op_val, sizeof (op_val)) < 0)
-    {
-        DEBUG_WARN("setsockopt: SO_BROADCAST failed\n");
-        return sock_ERROR;
-    }
+    if (setsockopt(sd_, SOL_SOCKET, SO_BROADCAST, CSTPCSTR & op_val, sizeof (op_val)))
+        throw bad_socket_broadcast("set SO_BROADCAST failed!");
 #endif
-    return sock_OK;
 }
 
 } //namespace udp

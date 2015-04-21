@@ -42,6 +42,16 @@ public:
 };
 
 /**
+ * MT Set exception.
+ */
+class bad_mt_set_erase: public mt_set_exception
+{
+public:
+    bad_mt_set_erase(string msg):mt_set_exception(string("mt_set::erase: ")+msg){}
+    virtual ~bad_mt_set_erase() throw() {}
+};
+
+/**
  * @brief Multi-thread safe set.
  */
 template<class kvT, class hashT=hash<kvT> >
@@ -77,14 +87,14 @@ public:
         /// @endcond
     }
 
-    iterator erase(iterator &it) throw() {
+    iterator erase(iterator &it) {
         /// @cond
         iterator r(this, it.element_->pNext_);
         if(it.element_ != base_list::end_iterable())
             delete base_set::erase_iterable(hash_index(static_cast<iterable*>(it.element_)->value_.first), 
                                            it.element_);
         else
-            throw set_exception("mt_set::erase faild!");
+            throw bad_mt_set_erase("can't erase end element!");
         return r;
         /// @endcond
     }
