@@ -58,6 +58,16 @@ public:
     virtual ~bad_ht_erase() throw() {}
 };
 
+/**
+ * Hash table exception.
+ */
+class bad_ht_index: public ht_exception
+{
+public:
+    bad_ht_index(string msg):ht_exception(string("hash_table::operator[] const: ")+msg){}
+    virtual ~bad_ht_index() throw() {}
+};
+
 using std::pair;
 using std::make_pair;
 
@@ -128,6 +138,16 @@ public:
             i = new iterable(data_place(key, value_type()));
             base_ht::insert_iterable(index, i);
         }
+        return static_cast<iterable*>(i)->value_;
+        /// @endcond
+    }
+    
+    const value_type &operator[](const key_type &key) const {
+        /// @cond
+        const size_t index = base_ht::hash_index(key);
+        list_iterable_base *i = base_ht::find_iterable(index, key);
+        if(i == base_list::end_iterable())
+            throw bad_ht_key("no value with specified key!");
         return static_cast<iterable*>(i)->value_;
         /// @endcond
     }

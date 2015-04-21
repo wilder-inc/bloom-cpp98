@@ -57,21 +57,21 @@ class set_exception: public exception
 {
 public:
     set_exception(string msg):exception(msg){}
-    virtual ~set_exception()  {}
+    virtual ~set_exception() throw() {}
 };
 
 /**
- * Hash table exception.
+ * Set exception.
  */
 class bad_set_erase: public ht_exception
 {
 public:
     bad_set_erase(string msg):ht_exception(string("shared::set::erase: ")+msg){}
-    virtual ~bad_ht_erase() throw() {}
+    virtual ~bad_set_erase() throw() {}
 };
 
 /**
- * @brief Hash table for shared objects.
+ * @brief Set for shared objects.
  */
 template<class kvT, class hashT=hash<ptr<kvT> > >
 class set : public store, public set_t<ptr<kvT>, hashT, storable_single<kvT> >
@@ -203,6 +203,8 @@ public:
         /// @endcond
     }
 
+private:
+    
     virtual void remove(storable *data)
     {
         DEBUG_INFO("removing from store...\n");

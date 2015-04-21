@@ -60,6 +60,16 @@ public:
 };
 
 /**
+ * Hash table exception.
+ */
+class bad_ht_index: public ht_exception
+{
+public:
+    bad_ht_index(string msg):ht_exception(string("shared::hash_table::operator[] const: ")+msg){}
+    virtual ~bad_ht_index() throw() {}
+};
+
+/**
  * @brief Hash table for shared objects.
  */
 template<class kT, class vT, class hashT=hash<kT> >
@@ -129,6 +139,16 @@ public:
         return static_cast<iterable*>(i)->value_.second;
         /// @endcond
     }
+    
+    const ptr<value_type> &operator[](const key_type &key) const {
+        /// @cond
+        const size_t index = base_ht::hash_index(key);
+        list_iterable_base *i = base_ht::find_iterable(index, key);
+        if(i == base_list::end_iterable())
+            throw bad_ht_key("no value with specified key!");
+        return static_cast<iterable*>(i)->value_.second;
+        /// @endcond
+    }
 
     iterator find(const key_type &key){
         return iterator(base_ht::find_iterable(base_ht::hash_index(key), key));
@@ -185,6 +205,8 @@ public:
     inline void rehash(size_t hash_size) FORCE_INLINE {
         base_ht::rehash();
     }
+    
+private:
     
     virtual void remove(storable *data) {
         /// @cond
