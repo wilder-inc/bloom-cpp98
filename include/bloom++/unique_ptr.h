@@ -43,8 +43,10 @@ public:
     
     unique_ptr():pointer_(0){}
     
+    explicit unique_ptr(T *ptr):pointer_(ptr){}
+    
     template<class Tp1>
-    explicit unique_ptr(Tp1 *p):pointer_(p){}
+    explicit unique_ptr(const unique_ptr<Tp1> &p, T *ptr):pointer_(p.release(ptr)){}
     
     unique_ptr(const unique_ptr &ptr):pointer_(ptr.release()){}
     
@@ -75,6 +77,12 @@ public:
         return ret;
     }
     
+    template<class Tp1>
+    Tp1 *release(Tp1 *ptr) const {
+        pointer_ = NULL;
+        return ptr;
+    }
+    
     void reset(T *p = NULL){
         if(pointer_)
             delete pointer_;
@@ -97,8 +105,10 @@ public:
     
     unique_ptr():pointer_(0){}
     
+    explicit unique_ptr(T *ptr):pointer_(ptr){}
+    
     template<class Tp1>
-    explicit unique_ptr(Tp1 *p):pointer_(p){}
+    explicit unique_ptr(const unique_ptr<Tp1> &p, T *ptr):pointer_(p.release(ptr)){}
     
     unique_ptr(const unique_ptr &ptr):pointer_(ptr.release()){}
     
@@ -133,6 +143,12 @@ public:
         return ret;
     }
     
+    template<class Tp1>
+    Tp1 *release(Tp1 *ptr) const {
+        pointer_ = NULL;
+        return ptr;
+    }
+    
     void reset(T *p = NULL){
         if(pointer_)
             delete [] pointer_;
@@ -158,6 +174,34 @@ template<class Tp, class Tp1>
 bool operator!=(const unique_ptr<Tp> &p, const unique_ptr<Tp1> &p1)
 {
     return p.get() != p1.get();
+}
+
+/*
+ * Casts
+ */
+
+template<class Tp, class Tp1>
+inline unique_ptr<Tp> static_pointer_cast(const unique_ptr<Tp1> &p)
+{
+    return unique_ptr<Tp>(p, static_cast<Tp*>(p.get()));
+}
+
+template<class Tp, class Tp1>
+inline unique_ptr<Tp> const_pointer_cast(const unique_ptr<Tp1> &p)
+{
+    return unique_ptr<Tp>(p, const_cast<Tp*>(p.get()));
+}
+
+template<class Tp, class Tp1>
+inline unique_ptr<Tp> dynamic_pointer_cast(const unique_ptr<Tp1> &p)
+{
+    return unique_ptr<Tp>(p, dynamic_cast<Tp*>(p.get()));
+}
+
+template<class Tp, class Tp1>
+inline unique_ptr<Tp> reinterpret_pointer_cast(const unique_ptr<Tp1> &p)
+{
+    return unique_ptr<Tp>(p, reinterpret_cast<Tp*>(p.get()));
 }
 
 } //namespace bloom
